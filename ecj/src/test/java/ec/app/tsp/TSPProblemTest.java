@@ -59,7 +59,7 @@ public class TSPProblemTest
     @Test(expected = OutputExitException.class)
     public void testSetup()
     {
-        state.parameters.set(BASE.push(TSPProblem.P_FILE), "/dev/null");
+        state.parameters.set(BASE.push(TSPProblem.P_FILE), "tmp.txt");
         final TSPProblem instance = new TSPProblem();
         instance.setup(state, BASE);
     }

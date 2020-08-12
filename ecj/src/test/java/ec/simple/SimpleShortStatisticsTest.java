@@ -49,7 +49,7 @@ public class SimpleShortStatisticsTest
 	    state.population.subpops = new ArrayList();
         state.population.subpops.add(new Subpopulation());
 	    state.population.subpops.get(0).individuals = getTestPopulation();
-	    state.parameters.set(BASE.push(TestStatistics.P_STATISTICS_FILE), "/tmp/a.txt");
+	    state.parameters.set(BASE.push(TestStatistics.P_STATISTICS_FILE), "tmp_a.txt");
         }
     
     @Test
@@ -61,7 +61,7 @@ public class SimpleShortStatisticsTest
 	    statInd.doHeader = true;
 	    statInd.preInitializationStatistics(state);
 	    state.output.flush();
-	    BufferedReader Buff = new BufferedReader(new FileReader("/tmp/a.txt"));
+	    BufferedReader Buff = new BufferedReader(new FileReader("tmp_a.txt"));
         String text = Buff.readLine();
         assertEquals("generation meanFitness bestOfGenFitness bestSoFarFitness", text);
 	}
@@ -81,7 +81,7 @@ public class SimpleShortStatisticsTest
 	    statInd.postInitializationStatistics(state);
 	    statInd.postEvaluationStatistics(state);
         state.output.flush();
-        BufferedReader Buff = new BufferedReader(new FileReader("/tmp/a.txt"));
+        BufferedReader Buff = new BufferedReader(new FileReader("tmp_a.txt"));
         String text = Buff.readLine();
         assertEquals("0 0.55 1.0 1.0", text);
         }
