@@ -16,7 +16,7 @@ parent.0 = ./mastermeta.params
 eval.slave.muzzle = true
 
 # eliminate the slave's statistics file (it won't really matter anyway)
-stat.file = /dev/null
+stat.file = tmp.txt
 stat.muzzle=true
 
 

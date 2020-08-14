@@ -2,7 +2,7 @@ parent.0 = ecsuite.params
 
 # LOWER LEVEL STUFF IN META
 # This tells us not to write out to a statistics file
-stat.file = /dev/null
+stat.file = tmp.txt
 stat.silent=true
 silent = true
 
