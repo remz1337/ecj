@@ -46,3 +46,10 @@ eval.problem.data = ec.gp.GPData
 gp.fs.0.size = 6
 eval.problem.moves = 400
 eval.problem.file = santafe.trl
+
+# Export population to file through statistics
+stat.file =	$ant.stat
+stat.num-children      = 1
+stat.child.0           = ec.app.ant.MyStatistics
+stat.child.0.pop-file  = pop.stat
+stat.child.0.info-file = info.stat
