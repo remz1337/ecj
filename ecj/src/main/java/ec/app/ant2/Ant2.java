@@ -55,7 +55,7 @@ import java.util.StringTokenizer;
  * @version 1.0 
  */
 
-public class Ant extends GPProblem implements SimpleProblemForm
+public class Ant2 extends GPProblem implements SimpleProblemForm
     {
     public static final String P_FILE = "file";
     public static final String P_MOVES = "moves";
@@ -109,7 +109,7 @@ public class Ant extends GPProblem implements SimpleProblemForm
 
     public Object clone()
         {
-        Ant myobj = (Ant) (super.clone());
+        Ant2 myobj = (Ant2) (super.clone());
         myobj.map = new int[map.length][];
         for(int x=0;x<map.length;x++)
             myobj.map[x] = (int[])(map[x].clone());

@@ -9,7 +9,7 @@ package ec.app.ant2.func;
 
 import ec.EvolutionState;
 import ec.Problem;
-import ec.app.ant2.Ant;
+import ec.app.ant2.Ant2;
 import ec.gp.ADFStack;
 import ec.gp.GPData;
 import ec.gp.GPIndividual;
@@ -29,7 +29,7 @@ import ec.gp.GPNode;
 
 public class Move extends GPNode implements EvalPrint
     {
-    public String toString() { return "move"; }
+    public String toString() { return "m"; }
 
     /*
       public void checkConstraints(final EvolutionState state,
@@ -53,22 +53,22 @@ public class Move extends GPNode implements EvalPrint
         final GPIndividual individual,
         final Problem problem)
         {
-        Ant p = (Ant)problem;
+        Ant2 p = (Ant2)problem;
         switch (p.orientation)
             {
-            case Ant.O_UP:
+            case Ant2.O_UP:
                 p.posy--;
                 if (p.posy<0) p.posy = p.maxy-1;
                 break;
-            case Ant.O_LEFT:
+            case Ant2.O_LEFT:
                 p.posx--;
                 if (p.posx<0) p.posx = p.maxx-1;
                 break;
-            case Ant.O_DOWN:
+            case Ant2.O_DOWN:
                 p.posy++;
                 if (p.posy>=p.maxy) p.posy=0;
                 break;
-            case Ant.O_RIGHT:
+            case Ant2.O_RIGHT:
                 p.posx++;
                 if (p.posx>=p.maxx) p.posx=0;
                 break;
@@ -78,10 +78,10 @@ public class Move extends GPNode implements EvalPrint
             }
 
         p.moves++;
-        if (p.map[p.posx][p.posy]== Ant.FOOD && p.moves < p.maxMoves )
+        if (p.map[p.posx][p.posy]== Ant2.FOOD && p.moves < p.maxMoves )
             {
             p.sum++;
-            p.map[p.posx][p.posy]= Ant.ATE;
+            p.map[p.posx][p.posy]= Ant2.ATE;
             }
         }
 
@@ -94,22 +94,22 @@ public class Move extends GPNode implements EvalPrint
         final Problem problem,
         final int[][] map2)
         {
-        Ant p = (Ant)problem;
+        Ant2 p = (Ant2)problem;
         switch (p.orientation)
             {
-            case Ant.O_UP:
+            case Ant2.O_UP:
                 p.posy--;
                 if (p.posy<0) p.posy = p.maxy-1;
                 break;
-            case Ant.O_LEFT:
+            case Ant2.O_LEFT:
                 p.posx--;
                 if (p.posx<0) p.posx = p.maxx-1;
                 break;
-            case Ant.O_DOWN:
+            case Ant2.O_DOWN:
                 p.posy++;
                 if (p.posy>=p.maxy) p.posy=0;
                 break;
-            case Ant.O_RIGHT:
+            case Ant2.O_RIGHT:
                 p.posx++;
                 if (p.posx>=p.maxx) p.posx=0;
                 break;
@@ -119,10 +119,10 @@ public class Move extends GPNode implements EvalPrint
             }
 
         p.moves++;
-        if (p.map[p.posx][p.posy]== Ant.FOOD && p.moves < p.maxMoves)
+        if (p.map[p.posx][p.posy]== Ant2.FOOD && p.moves < p.maxMoves)
             {
             p.sum++;
-            p.map[p.posx][p.posy]= Ant.ATE;
+            p.map[p.posx][p.posy]= Ant2.ATE;
             }
 
         if (p.moves<p.maxMoves)

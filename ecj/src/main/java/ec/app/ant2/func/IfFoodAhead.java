@@ -9,7 +9,7 @@ package ec.app.ant2.func;
 
 import ec.EvolutionState;
 import ec.Problem;
-import ec.app.ant2.Ant;
+import ec.app.ant2.Ant2;
 import ec.gp.ADFStack;
 import ec.gp.GPData;
 import ec.gp.GPIndividual;
@@ -29,7 +29,7 @@ import ec.gp.GPNode;
 
 public class IfFoodAhead extends GPNode implements EvalPrint
     {
-    public String toString() { return "if-food-ahead"; }
+    public String toString() { return "i"; }
 
     /*
       public void checkConstraints(final EvolutionState state,
@@ -53,26 +53,26 @@ public class IfFoodAhead extends GPNode implements EvalPrint
         final GPIndividual individual,
         final Problem problem)
         {
-        Ant p = (Ant)problem;
+        Ant2 p = (Ant2)problem;
         switch (p.orientation)
             {
-            case Ant.O_UP:
-                if (p.map[p.posx][(p.posy-1+p.maxy)%p.maxy]== Ant.FOOD)
+            case Ant2.O_UP:
+                if (p.map[p.posx][(p.posy-1+p.maxy)%p.maxy]== Ant2.FOOD)
                     children[0].eval(state,thread,input,stack,individual,problem);
                 else children[1].eval(state,thread,input,stack,individual,problem);
                 break;
-            case Ant.O_LEFT:
-                if (p.map[(p.posx-1+p.maxx)%p.maxx][p.posy]== Ant.FOOD)
+            case Ant2.O_LEFT:
+                if (p.map[(p.posx-1+p.maxx)%p.maxx][p.posy]== Ant2.FOOD)
                     children[0].eval(state,thread,input,stack,individual,problem);
                 else children[1].eval(state,thread,input,stack,individual,problem);
                 break;
-            case Ant.O_DOWN:
-                if (p.map[p.posx][(p.posy+1)%p.maxy]== Ant.FOOD)
+            case Ant2.O_DOWN:
+                if (p.map[p.posx][(p.posy+1)%p.maxy]== Ant2.FOOD)
                     children[0].eval(state,thread,input,stack,individual,problem);
                 else children[1].eval(state,thread,input,stack,individual,problem);
                 break;
-            case Ant.O_RIGHT:
-                if (p.map[(p.posx+1)%p.maxx][p.posy]== Ant.FOOD)
+            case Ant2.O_RIGHT:
+                if (p.map[(p.posx+1)%p.maxx][p.posy]== Ant2.FOOD)
                     children[0].eval(state,thread,input,stack,individual,problem);
                 else children[1].eval(state,thread,input,stack,individual,problem);
                 break;
@@ -91,26 +91,26 @@ public class IfFoodAhead extends GPNode implements EvalPrint
         final Problem problem,
         final int[][] map2)
         {
-        Ant p = (Ant)problem;
+        Ant2 p = (Ant2)problem;
         switch (p.orientation)
             {
-            case Ant.O_UP:
-                if (p.map[p.posx][(p.posy-1+p.maxy)%p.maxy]== Ant.FOOD)
+            case Ant2.O_UP:
+                if (p.map[p.posx][(p.posy-1+p.maxy)%p.maxy]== Ant2.FOOD)
                     ((EvalPrint)children[0]).evalPrint(state,thread,input,stack,individual,problem,map2);
                 else ((EvalPrint)children[1]).evalPrint(state,thread,input,stack,individual,problem,map2);
                 break;
-            case Ant.O_LEFT:
-                if (p.map[(p.posx-1+p.maxx)%p.maxx][p.posy]== Ant.FOOD)
+            case Ant2.O_LEFT:
+                if (p.map[(p.posx-1+p.maxx)%p.maxx][p.posy]== Ant2.FOOD)
                     ((EvalPrint)children[0]).evalPrint(state,thread,input,stack,individual,problem,map2);
                 else ((EvalPrint)children[1]).evalPrint(state,thread,input,stack,individual,problem,map2);
                 break;
-            case Ant.O_DOWN:
-                if (p.map[p.posx][(p.posy+1)%p.maxy]== Ant.FOOD)
+            case Ant2.O_DOWN:
+                if (p.map[p.posx][(p.posy+1)%p.maxy]== Ant2.FOOD)
                     ((EvalPrint)children[0]).evalPrint(state,thread,input,stack,individual,problem,map2);
                 else ((EvalPrint)children[1]).evalPrint(state,thread,input,stack,individual,problem,map2);
                 break;
-            case Ant.O_RIGHT:
-                if (p.map[(p.posx+1)%p.maxx][p.posy]== Ant.FOOD)
+            case Ant2.O_RIGHT:
+                if (p.map[(p.posx+1)%p.maxx][p.posy]== Ant2.FOOD)
                     ((EvalPrint)children[0]).evalPrint(state,thread,input,stack,individual,problem,map2);
                 else ((EvalPrint)children[1]).evalPrint(state,thread,input,stack,individual,problem,map2);
                 break;

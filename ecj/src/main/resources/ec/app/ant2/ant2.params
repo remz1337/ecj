@@ -35,7 +35,7 @@ gp.fs.0.func.6.nc = nc4
 # We specify our problem here
 #
 
-eval.problem = ec.app.ant2.Ant
+eval.problem = ec.app.ant2.Ant2
 # Because our GPData is completely empty, we can just use
 # GPData directly
 eval.problem.data = ec.gp.GPData
@@ -51,5 +51,5 @@ eval.problem.file = santafe.trl
 stat.file =	$ant2.stat
 stat.num-children      = 1
 stat.child.0           = ec.app.ant2.MyStatistics
-stat.child.0.pop-file  = pop.stat
+#stat.child.0.pop-file  = pop.stat
 stat.child.0.info-file = info.stat

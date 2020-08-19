@@ -2,4 +2,4 @@
 <op> ::= (if-food-ahead <op> <op>) 
 <op> ::=  (progn2 <op> <op>) 
 <op> ::= (progn3 <op> <op> <op>)
-<op> ::= (left) | (right) | (move)  
+<op> ::= (left) | (right) | (move)

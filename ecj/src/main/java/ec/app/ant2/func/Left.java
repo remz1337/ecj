@@ -9,7 +9,7 @@ package ec.app.ant2.func;
 
 import ec.EvolutionState;
 import ec.Problem;
-import ec.app.ant2.Ant;
+import ec.app.ant2.Ant2;
 import ec.gp.ADFStack;
 import ec.gp.GPData;
 import ec.gp.GPIndividual;
@@ -29,7 +29,7 @@ import ec.gp.GPNode;
 
 public class Left extends GPNode implements EvalPrint
     {
-    public String toString() { return "left"; }
+    public String toString() { return "l"; }
 
     /*    public void checkConstraints(final EvolutionState state,
           final int tree,
@@ -52,20 +52,20 @@ public class Left extends GPNode implements EvalPrint
         final GPIndividual individual,
         final Problem problem)
         {
-        Ant p = (Ant)problem;
+        Ant2 p = (Ant2)problem;
         switch (p.orientation)
             {
-            case Ant.O_UP:
-                p.orientation = Ant.O_LEFT;
+            case Ant2.O_UP:
+                p.orientation = Ant2.O_LEFT;
                 break;
-            case Ant.O_LEFT:
-                p.orientation = Ant.O_DOWN;
+            case Ant2.O_LEFT:
+                p.orientation = Ant2.O_DOWN;
                 break;
-            case Ant.O_DOWN:
-                p.orientation = Ant.O_RIGHT;
+            case Ant2.O_DOWN:
+                p.orientation = Ant2.O_RIGHT;
                 break;
-            case Ant.O_RIGHT:
-                p.orientation = Ant.O_UP;
+            case Ant2.O_RIGHT:
+                p.orientation = Ant2.O_UP;
                 break;
             default:  // whoa!
                 state.output.fatal("Whoa, somehow I got a bad orientation! (" + p.orientation + ")");

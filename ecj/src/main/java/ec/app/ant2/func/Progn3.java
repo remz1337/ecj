@@ -28,7 +28,7 @@ import ec.gp.GPNode;
 
 public class Progn3 extends GPNode implements EvalPrint
     {
-    public String toString() { return "progn3"; }
+    public String toString() { return "b"; }
 
     /*
       public void checkConstraints(final EvolutionState state,

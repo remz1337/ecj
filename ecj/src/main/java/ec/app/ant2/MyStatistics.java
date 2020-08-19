@@ -18,8 +18,8 @@ public class MyStatistics extends Statistics
     {
 
     // The parameter string and log number of the file for our readable population
-    public static final String P_POPFILE = "pop-file";
-    public int popLog;
+    //public static final String P_POPFILE = "pop-file";
+    //public int popLog;
 
     // The parameter string and log number of the file for our best-genome-#3 individual
     public static final String P_INFOFILE = "info-file";
@@ -31,7 +31,7 @@ public class MyStatistics extends Statistics
             super.setup(state,base);
 
             // set up popFile
-            File popFile = state.parameters.getFile(
+            /*File popFile = state.parameters.getFile(
                 base.push(P_POPFILE),null);
             if (popFile!=null) try
                                    {
@@ -41,7 +41,7 @@ public class MyStatistics extends Statistics
                     {
                     state.output.fatal("An IOException occurred while trying to create the log " +
                         popFile + ":\n" + i);
-                    }
+                    }*/
 
             // set up infoFile
             File infoFile = state.parameters.getFile(
@@ -64,11 +64,11 @@ public class MyStatistics extends Statistics
             // super.postEvaluationStatistics(state);
 
             // write out a warning that the next generation is coming
-            state.output.println("-----------------------\nGENERATION " +
+            /*state.output.println("-----------------------\nGENERATION " +
                     state.generation + "\n-----------------------", popLog);
 
             // print out the population
-            state.population.printPopulation(state, popLog);
+            state.population.printPopulation(state, popLog);*/
 
             // print out best genome #3 individual in subpop 0
             /*int best = 0;
@@ -88,7 +88,9 @@ public class MyStatistics extends Statistics
 
             state.output.println("-----------------------\nGENERATION MyPopStats!!!!!!!!! " +
                     state.generation + "\n-----------------------", infoLog);
-            for(int i = 0; i < state.population.subpops.get(0).individuals.size(); i++ )
+            for(int i = 0; i < state.population.subpops.get(0).individuals.size(); i++ ){
                 state.population.subpops.get(0).individuals.get(i).printIndividualForHumans(state, infoLog);
+                //state.population.subpops.get(0).individuals.get(i).genotypeToString();
+            }
         }
     }
