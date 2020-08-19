@@ -5,12 +5,11 @@
 */
 
 
-package ec.app.ant;
+package ec.app.ant2;
 
 import ec.EvolutionState;
 import ec.Statistics;
 import ec.util.Parameter;
-import ec.vector.DoubleVectorIndividual;
 
 import java.io.File;
 import java.io.IOException;
