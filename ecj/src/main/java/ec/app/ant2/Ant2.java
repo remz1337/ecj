@@ -11,6 +11,7 @@ import ec.EvolutionState;
 import ec.Individual;
 import ec.app.ant2.func.EvalPrint;
 import ec.gp.GPIndividual;
+import ec.app.ant2.Ant2Individual;
 import ec.gp.GPProblem;
 import ec.gp.koza.KozaFitness;
 import ec.simple.SimpleProblemForm;
@@ -106,6 +107,8 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
 
     // print modulo for doing the abcdefg.... thing at print-time
     public int pmod;
+
+    public String pheno[];
 
     public Object clone()
         {
@@ -284,5 +287,10 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
             state.output.println("",log);
             }
 
+        }
+
+        public String testy()
+        {
+            return "test";
         }
     }

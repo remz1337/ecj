@@ -4,6 +4,10 @@
 
 parent.0 = ../../gp/koza/koza.params
 
+
+pop.subpop.0.species.ind = ec.app.ant2.Ant2Individual
+
+
 # Stolen from koza/params -- overwriting just
 # a little for readability
 # You need to create at least one function set, 
