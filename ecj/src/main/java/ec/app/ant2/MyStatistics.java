@@ -54,8 +54,11 @@ public class MyStatistics extends Statistics
                     state.output.println("size:" + String.valueOf(state.population.subpops.get(0).individuals.get(i).size()), infoLog);
                     //state.output.println("Geno:"+ ((GPIndividual) state.population.subpops.get(0).individuals.get(i)).genotypeToString(), infoLog);
 
+                    state.output.print("tree:", infoLog);
                     ((Ant2Individual) state.population.subpops.get(0).individuals.get(i)).printTree(state,infoLog);
                     //state.population.subpops.get(0).individuals.get(i).printTesto(state,infoLog);
+
+                    state.output.println("pheno:" + ((Ant2Individual) state.population.subpops.get(0).individuals.get(i)).pheno, infoLog);
                 }
             }
 

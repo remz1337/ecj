@@ -5,6 +5,8 @@ import ec.gp.GPIndividual;
 
 public class Ant2Individual extends GPIndividual {
 
+    public String pheno;
+
     @Override
     public String genotypeToString() {
         return "testy";

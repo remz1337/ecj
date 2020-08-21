@@ -108,7 +108,7 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
     // print modulo for doing the abcdefg.... thing at print-time
     public int pmod;
 
-    public String pheno[];
+    public String pheno;
 
     public Object clone()
         {
@@ -208,7 +208,7 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
         }
 
     public void evaluate(final EvolutionState state, 
-        final Individual ind, 
+        final Individual ind,
         final int subpopulation,
         final int threadnum)
         {
@@ -218,6 +218,7 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
             posx = 0;
             posy = 0;
             orientation = O_RIGHT;
+            pheno = "";
 
             for(moves=0;moves<maxMoves && sum<food; )
                 ((GPIndividual)ind).trees[0].child.eval(
@@ -228,6 +229,7 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
             f.setStandardizedFitness(state,(food - sum));
             f.hits = sum;
             ind.evaluated = true;
+            ((Ant2Individual)ind).pheno=pheno;
 
             // clean up array
             for(int y=0;y<food;y++)
@@ -250,6 +252,7 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
         posx = 0;
         posy = 0;
         orientation = O_RIGHT;
+        pheno = "";
 
         int[][] map2 = new int[map.length][];
         for(int x=0;x<map.length;x++)
@@ -287,10 +290,5 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
             state.output.println("",log);
             }
 
-        }
-
-        public String testy()
-        {
-            return "test";
         }
     }
