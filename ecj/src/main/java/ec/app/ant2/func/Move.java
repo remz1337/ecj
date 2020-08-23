@@ -54,7 +54,7 @@ public class Move extends GPNode implements EvalPrint
         final Problem problem)
         {
         Ant2 p = (Ant2)problem;
-        p.pheno+="m";
+        p.phenotype+="m";
         switch (p.orientation)
             {
             case Ant2.O_UP:
@@ -96,7 +96,7 @@ public class Move extends GPNode implements EvalPrint
         final int[][] map2)
         {
         Ant2 p = (Ant2)problem;
-        p.pheno+="m";
+        p.phenotype+="m";
         switch (p.orientation)
             {
             case Ant2.O_UP:

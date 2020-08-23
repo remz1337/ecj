@@ -55,7 +55,7 @@ public class Right extends GPNode implements EvalPrint
         final Problem problem)
         {
         Ant2 p = (Ant2)problem;
-        p.pheno+="r";
+        p.phenotype+="r";
         switch (p.orientation)
             {
             case Ant2.O_UP:

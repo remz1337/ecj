@@ -16,11 +16,13 @@ import ec.vector.DoubleVectorIndividual;
 import java.io.File;
 import java.io.IOException;
 
-public class MyStatistics extends Statistics
+public class VREStats extends Statistics
     {
-    // The parameter string and log number of the file for our best-genome-#3 individual
-    public static final String P_INFOFILE = "info-file";
-    public int infoLog;
+    // The parameter string and log number of the file for our CSV export
+    public static final String P_VRECSV = "VRE-CSV";
+    public int vreLog;
+
+    private boolean csvHeaderWritten =false;
 
     public void setup(final EvolutionState state, final Parameter base)
         {
@@ -29,10 +31,10 @@ public class MyStatistics extends Statistics
 
             // set up infoFile
             File infoFile = state.parameters.getFile(
-                base.push(P_INFOFILE),null);
+                base.push(P_VRECSV),null);
             if (infoFile!=null) try
                                     {
-                                    infoLog = state.output.addLog(infoFile,true);
+                                        vreLog = state.output.addLog(infoFile,true);
                                     }
                 catch (IOException i)
                     {
@@ -47,18 +49,21 @@ public class MyStatistics extends Statistics
             // be certain to call the hook on super!
             super.postEvaluationStatistics(state);
 
-            state.output.println("-----------------------\nGENERATION " +
-                    state.generation + "\n-----------------------", infoLog);
+            // Header
+            if(!csvHeaderWritten){
+                state.output.println("Genotype,Fitness,Phenotype", vreLog);
+                csvHeaderWritten=true;
+            }
+
+            // Population
+            //state.output.println("-----------------------\nGENERATION " + state.generation + "\n-----------------------", vreLog);
             for(int i = 0; i < state.population.subpops.get(0).individuals.size(); i++ ){
                 if(state.population.subpops.get(0).individuals.get(i).evaluated){
-                    state.output.println("size:" + String.valueOf(state.population.subpops.get(0).individuals.get(i).size()), infoLog);
-                    //state.output.println("Geno:"+ ((GPIndividual) state.population.subpops.get(0).individuals.get(i)).genotypeToString(), infoLog);
-
-                    state.output.print("tree:", infoLog);
-                    ((Ant2Individual) state.population.subpops.get(0).individuals.get(i)).printTree(state,infoLog);
-                    //state.population.subpops.get(0).individuals.get(i).printTesto(state,infoLog);
-
-                    state.output.println("pheno:" + ((Ant2Individual) state.population.subpops.get(0).individuals.get(i)).pheno, infoLog);
+                    state.output.print("\"", vreLog);
+                    ((GPIndividual) state.population.subpops.get(0).individuals.get(i)).trees[0].child.printRootedTree(state,vreLog,0);
+                    state.output.print("\"", vreLog);
+                    state.output.print(",\"" + ((GPIndividual) state.population.subpops.get(0).individuals.get(i)).fitness.fitness()+ "\"", vreLog);
+                    state.output.println(",\"" + ((GPIndividual) state.population.subpops.get(0).individuals.get(i)).phenotype+"\"", vreLog);
                 }
             }
 

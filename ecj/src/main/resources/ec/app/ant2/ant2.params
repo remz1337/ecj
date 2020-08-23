@@ -5,7 +5,7 @@
 parent.0 = ../../gp/koza/koza.params
 
 
-pop.subpop.0.species.ind = ec.app.ant2.Ant2Individual
+pop.subpop.0.species.ind = ec.gp.GPIndividual
 
 
 # Stolen from koza/params -- overwriting just
@@ -54,6 +54,6 @@ eval.problem.file = santafe.trl
 # Export population to file through statistics
 stat.file =	$ant2.stat
 stat.num-children      = 1
-stat.child.0           = ec.app.ant2.MyStatistics
-#stat.child.0.pop-file  = pop.stat
-stat.child.0.info-file = info.stat
+stat.child.0           = ec.app.ant2.VREStats
+# This file can be rename at runtime by passing it a different value at the command line
+stat.child.0.VRE-CSV = vre.csv

@@ -11,7 +11,6 @@ import ec.EvolutionState;
 import ec.Individual;
 import ec.app.ant2.func.EvalPrint;
 import ec.gp.GPIndividual;
-import ec.app.ant2.Ant2Individual;
 import ec.gp.GPProblem;
 import ec.gp.koza.KozaFitness;
 import ec.simple.SimpleProblemForm;
@@ -108,7 +107,7 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
     // print modulo for doing the abcdefg.... thing at print-time
     public int pmod;
 
-    public String pheno;
+    public String phenotype;
 
     public Object clone()
         {
@@ -218,7 +217,7 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
             posx = 0;
             posy = 0;
             orientation = O_RIGHT;
-            pheno = "";
+            phenotype = "";
 
             for(moves=0;moves<maxMoves && sum<food; )
                 ((GPIndividual)ind).trees[0].child.eval(
@@ -229,7 +228,7 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
             f.setStandardizedFitness(state,(food - sum));
             f.hits = sum;
             ind.evaluated = true;
-            ((Ant2Individual)ind).pheno=pheno;
+            ((GPIndividual)ind).phenotype=phenotype;
 
             // clean up array
             for(int y=0;y<food;y++)
@@ -252,7 +251,7 @@ public class Ant2 extends GPProblem implements SimpleProblemForm
         posx = 0;
         posy = 0;
         orientation = O_RIGHT;
-        pheno = "";
+        phenotype = "";
 
         int[][] map2 = new int[map.length][];
         for(int x=0;x<map.length;x++)
