@@ -61,8 +61,7 @@ public class VREStats extends Statistics
                 if(state.population.subpops.get(0).individuals.get(i).evaluated){
                     state.output.print("\"", vreLog);
                     ((GPIndividual) state.population.subpops.get(0).individuals.get(i)).trees[0].child.printRootedTree(state,vreLog,0);
-                    state.output.print("\"", vreLog);
-                    state.output.print(",\"" + ((GPIndividual) state.population.subpops.get(0).individuals.get(i)).fitness.fitness()+ "\"", vreLog);
+                    state.output.print("\"," + ((GPIndividual) state.population.subpops.get(0).individuals.get(i)).fitness.fitness(), vreLog);
                     state.output.println(",\"" + ((GPIndividual) state.population.subpops.get(0).individuals.get(i)).phenotype+"\"", vreLog);
                 }
             }
