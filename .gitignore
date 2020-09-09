@@ -1,0 +1,34 @@
+ecj/nbproject
+ecj/nb-configuration.xml
+ecj/nbactions.xml
+ecj/target/
+.idea/
+.vscode
+.DS_Store
+ecj.iml
+ecj/src/main/resources/ec/app/mona/0-MonaLisaOut.png
+ecj/src/main/resources/ec/app/mona/1-MonaLisaOut.png
+*.stat
+*.aux
+*.idx
+*.log
+*.out
+*.toc
+*.classpath
+*.project
+*.settings/
+*.bbl
+*.blg
+*.synctex.gz
+*.pdf
+*~
+
+#ignore tmp files for Windows
+tmp.txt
+tmp_a.txt
+
+#ignore CSV outputs
+*.csv
+
+#ignore output folder
+output
