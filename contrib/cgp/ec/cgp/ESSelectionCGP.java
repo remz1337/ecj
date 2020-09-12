@@ -5,6 +5,8 @@ import ec.Individual;
 import ec.es.ESSelection;
 import ec.es.MuCommaLambdaBreeder;
 
+import java.util.List;
+
 /**
  * CGP benefits greatly from 'neutrality', the idea that genetic drift yields to
  * diverse individuals having equal fitness. This hacked ESSelection ensures
@@ -38,7 +40,7 @@ public class ESSelectionCGP extends ESSelection {
 		// integer
 		// division
 
-		Individual[] inds2 = state.population.subpops[subpopulation].individuals;
+		List<Individual> inds2 = state.population.subpops.get(subpopulation).individuals;
 
 		
 		/*
@@ -48,9 +50,9 @@ public class ESSelectionCGP extends ESSelection {
 		 * random.
 		 */
 		if (pos == 0) { /* only do this for the first parent. */
-			float fit = inds2[parent].fitness.fitness();
+			double fit = inds2.get(parent).fitness.fitness();
 			int x = 0;
-			while (fit == inds2[parent + x].fitness.fitness()
+			while (fit == inds2.get(parent + x).fitness.fitness()
 					&& parent + x < inds.length)
 				x++;
 			if (x > 0) {
@@ -60,16 +62,16 @@ public class ESSelectionCGP extends ESSelection {
 
 		// and so we return the parent
 		if (pos == 0) {
-			inds[start] = state.population.subpops[subpopulation].individuals[parent];
+			inds[start] = state.population.subpops.get(subpopulation).individuals.get(parent);
 			/*
 			 * swap them since we forget which parent we selected next time
 			 * produce is called.
 			 */
-			Individual tmp = state.population.subpops[subpopulation].individuals[parent];
-			state.population.subpops[subpopulation].individuals[parent] = state.population.subpops[subpopulation].individuals[0];
-			state.population.subpops[subpopulation].individuals[0] = tmp;
+			Individual tmp = state.population.subpops.get(subpopulation).individuals.get(parent);
+			state.population.subpops.get(subpopulation).individuals.set(parent, state.population.subpops.get(subpopulation).individuals.get(0));
+			state.population.subpops.get(subpopulation).individuals.set(0, tmp);
 		} else
-			inds[start] = state.population.subpops[subpopulation].individuals[0];
+			inds[start] = state.population.subpops.get(subpopulation).individuals.get(0);
 
 		// and so we return the parent
 		return 1;

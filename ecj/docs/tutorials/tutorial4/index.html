@@ -28,7 +28,7 @@
 
 <p>
 <img valign=top align=right src="GPGraph.png">
-ECJ implements genetic programming individuals as forests of trees.  Each tree is implemented as a tree of <a href="../../classdocs/ec/gp/GPNode.html">GPNode</a>s.  A <a href="../../classdocs/ec/gp/GPIndividual.html">GPIndividual</a> is a subclass of Individual which holds an array of <a href="../../classdocs/ec/gp/GPTree.html">GPTree</a>s.  In most GP problems, the GPIndividual uses <a href="../../classdocs/ec/gp/koza/KozaFitness">KozaFitness</a>, a Fitness subclass which implements Koza's raw and standardized fitness and hits measure.
+ECJ implements genetic programming individuals as forests of trees.  Each tree is implemented as a tree of <a href="../../classdocs/ec/gp/GPNode.html">GPNode</a>s.  A <a href="../../classdocs/ec/gp/GPIndividual.html">GPIndividual</a> is a subclass of Individual which holds an array of <a href="../../classdocs/ec/gp/GPTree.html">GPTree</a>s.  In most GP problems, the GPIndividual uses <a href="../../classdocs/ec/gp/koza/KozaFitness.html">KozaFitness</a>, a Fitness subclass which implements Koza's raw and standardized fitness and hits measure.
  
 <p>A GPTree contains a pointer to the root GPNode of its tree.  GPNodes contain an array of pointers to their children in the tree.  At present, all GPNodes contain this array, even the terminals, for whom the array is of zero length.  For convenience, GPNodes also maintain a pointer to their parent in the tree (always a GPNode, except the root's parent, which is the owning GPTree) and an integer indicating which number child they are of their parent (their <tt>argposition</tt>).
 
@@ -41,7 +41,7 @@ Set-based strong typing is sufficient for a wide variety of needs, including typ
 
 <p>While ECJ supports strong typing, in fact most GP applications only need a single type (they are "typeless").  For convenience, ECJ's default parameter files for GP define a single type called (for want of a better name) <b>nil</b>, and some default GPNodeConstraints of various arities which only use the type <b>nil</b> 
 
-<p>Each GPTree subscribes to a <a href="../../classdocs/ec/gp/GPFunctionSet.html">GPFunctionSet</a> which defines the GPNodes legally permitted in the tree.  GPFunctionSets store, in a variety of redundant tables, the relevant GPNodes stored inside  <a href="../../classdocs/ec/gp/GPFuncInfo.html">GPFuncInfo</a> objects.  GPFuncInfo's existence is historical oddity -- the GPFunctionSet could have just stored the GPNodes directly.  When an algorithm needs to generate a tree, it does so by finding the appropriate GPFunctionSet choosing GPNodes from the set, and cloning them to produce nodes to hang in the tree.
+<p>Each GPTree subscribes to a <a href="../../classdocs/ec/gp/GPFunctionSet.html">GPFunctionSet</a> which defines the GPNodes legally permitted in the tree.  GPFunctionSets store, in a variety of redundant tables, the relevant GPNodes.  When an algorithm needs to generate a tree, it does so by finding the appropriate GPFunctionSet choosing GPNodes from the set, and cloning them to produce nodes to hang in the tree.
 
 <p>GP builds trees using tree generation algorithms, all of which are subclasses of <a href="../../classdocs/ec/gp/GPNodeBuilder.html">GPNodeBuilder</a>.   Tree generation algorithms are usually used in one of two places: population initialization and mutation.  Mutation algorithms have their own parameters where you can specify the GPNodeBuilder subclass you'd like.  Additionally, each GPTree has a reference (not shown on the graph) to a GPNodeBuilder resonsible for initialization of that tree.
 
@@ -69,8 +69,8 @@ public class DoubleData extends GPData
     {
     public double x;    <font color=gray>// return value</font>
 
-    public GPData copyTo(final GPData gpd)   <font color=gray>// copy my stuff to another DoubleData</font>
-        { ((DoubleData)gpd).x = x; return gpd; }
+    public void copyTo(final GPData gpd)   <font color=gray>// copy my stuff to another DoubleData</font>
+        { ((DoubleData)gpd).x = x; }
     }
 </pre></tt>
 
@@ -90,6 +90,19 @@ public class Add extends GPNode
     {
     public String toString() { return "+"; }
 
+    public int expectedChildren() { return 2; }
+    }
+</pre></tt>
+
+<p>Add needs to specify its printed form ("+"), and a function (expectedChildren(...) ) which give <b>Add</b> a chance to do a sanity check when first loaded, to verify that the child array size is correct.  Instead of expectedChildren(...), you could have instead written:
+
+<tt><pre>
+    // public int expectedChildren() { return 2; }
+
+    // You could do this instead.  It'd give you a chance to do more verifications
+    // and checks.  The default implementation of checkConstraints just calls
+    // expectedChildren(), which is why you can just implement expectedChildren
+    // instead in most simple cases.
     public void checkConstraints(final EvolutionState state,
                                  final int tree,
                                  final GPIndividual typicalIndividual,
@@ -97,13 +110,13 @@ public class Add extends GPNode
         {
         super.checkConstraints(state,tree,typicalIndividual,individualBase);
         if (children.length!=2)
-            state.output.error("Incorrect number of children for node " + 
+            state.output.error("Incorrect number of children for node " +
                                toStringForError() + " at " +
                                individualBase);
         }
 </pre></tt>
 
-<p>Add needs to specify its printed form ("+"), and a function (checkConstraints(...) ) which give <b>Add</b> a chance to do a sanity check when first loaded.  This is usually used to verify that the child array size is correct.
+ECJ will call the checkConstraints() method, which gives you a chance to do more sophisticated checks.  Above we're doing more or less what the default version of checkConstraints() does anyway, which is just call expectedChildren() and verify that the children.length variable is the same as it.   Thus if you don't need to do anything more than a sanity check on the number of child nodes, just implement expectedChildren() and don't bother with checkConstraints(). 
 
 <p>Next we will define the central function to the GPNode: the <b>eval</b> method, which is called when the GPNode must do its part during the execution of the tree as s-expression computer code.  <b>eval</b> is called by the GPNode's parent to execute the GPNode and get its return value.
 
@@ -145,17 +158,8 @@ public class Sub extends GPNode
     {
     public String toString() { return "-"; }
 
-    public void checkConstraints(final EvolutionState state,
-                                 final int tree,
-                                 final GPIndividual typicalIndividual,
-                                 final Parameter individualBase)
-        {
-        super.checkConstraints(state,tree,typicalIndividual,individualBase);
-        if (children.length!=2)
-            state.output.error("Incorrect number of children for node " + 
-                               toStringForError() + " at " +
-                               individualBase);
-        }
+    public int expectedChildren() { return 2; }
+
     public void eval(final EvolutionState state,
                      final int thread,
                      final GPData input,
@@ -187,17 +191,8 @@ public class Mul extends GPNode
     {
     public String toString() { return "*"; }
 
-    public void checkConstraints(final EvolutionState state,
-                                 final int tree,
-                                 final GPIndividual typicalIndividual,
-                                 final Parameter individualBase)
-        {
-        super.checkConstraints(state,tree,typicalIndividual,individualBase);
-        if (children.length!=2)
-            state.output.error("Incorrect number of children for node " + 
-                               toStringForError() + " at " +
-                               individualBase);
-        }
+    public int expectedChildren() { return 2; }
+
     public void eval(final EvolutionState state,
                      final int thread,
                      final GPData input,
@@ -229,17 +224,8 @@ public class X extends GPNode
     {
     public String toString() { return "x"; }
 
-    public void checkConstraints(final EvolutionState state,
-                                 final int tree,
-                                 final GPIndividual typicalIndividual,
-                                 final Parameter individualBase)
-        {
-        super.checkConstraints(state,tree,typicalIndividual,individualBase);
-        if (children.length!=0)
-            state.output.error("Incorrect number of children for node " + 
-                               toStringForError() + " at " +
-                               individualBase);
-        }
+    public int expectedChildren() { return 0; }
+
 </pre></tt>
 
 <p>Note that there are no children.  Now what we'll do is define in our Problem two public doubles called <b>currentX</b> and <b>currentY</b>.  These are the values that these nodes return when evaluated.  Hence we add:
@@ -270,17 +256,7 @@ public class Y extends GPNode
     {
     public String toString() { return "y"; }
 
-    public void checkConstraints(final EvolutionState state,
-                                 final int tree,
-                                 final GPIndividual typicalIndividual,
-                                 final Parameter individualBase)
-        {
-        super.checkConstraints(state,tree,typicalIndividual,individualBase);
-        if (children.length!=0)
-            state.output.error("Incorrect number of children for node " + 
-                               toStringForError() + " at " +
-                               individualBase);
-        }
+    public int expectedChildren() { return 0; }
 
     public void eval(final EvolutionState state,
                      final int thread,
@@ -315,34 +291,21 @@ public class MultiValuedRegression extends GPProblem implements SimpleProblemFor
 
     public double currentX;
 	public double currentY;
-    
-    public DoubleData input;
 
-    public Object clone()
-        {
-        MultiValuedRegression newobj = (MultiValuedRegression) (super.clone());
-        newobj.input = (DoubleData)(input.clone());
-        return newobj;
-        }
-</pre></tt>
-
-<p>Here, after three tutorials of discussion, we're finally implementing the <b>clone</b> method.  We override this method because to clone the MultiValuedRegression class, we must also clone the <b>input</b> variable (it's an object -- DoubleData, so it's not copied in a light clone which is the default for clone()).  Now we add the <b>setup</b> method.
-
-<tt><pre>
     public void setup(final EvolutionState state,
                       final Parameter base)
         {
         <font color=gray>// very important, remember this</font>
         super.setup(state,base);
 
-        <font color=gray>// set up our input -- don't want to use the default base, it's unsafe here</font>
-        input = (DoubleData) state.parameters.getInstanceForParameterEq(
-            base.push(P_DATA), null, DoubleData.class);
-        input.setup(state,base.push(P_DATA));
+        <font color=gray>// verify our input is the right class (or subclasses from it)</font>
+        if (!(input instanceof DoubleData))
+            state.output.fatal("GPData class must subclass from " + DoubleData.class,
+                base.push(P_DATA), null);
         }
 </pre></tt>
 
-<p>Here we're basically using the <b>setup</b> method to load our DoubleData class.  We could have hard-coded the object to be a DoubleData, but that wouldn't be ECJ style.  Instead we load it from the parameter database.  This also allows the user to change the class in case that's useful to him.
+<p>GPProblem defines an instance variable called <b>input</b>, which contains a GPData instance loaded from our parameters.  Here, we get a chance to verify that this instance is of a class we can use.  In our case, we want it to be a DoubleData class or some subclass of that.
 
 <p>Last we need to define the <b>evaluate</b> method, which actually evaluates the individual and sets its fitness.  We will do so by testing the individual against ten data points, then setting its fitness to the sum of how close it got in each case.  Thus 0 is the ideal fitness -- in GP, 0 is the ideal and infinity is worse than the worst possible fitness.  The hit measure (an auxillary measure) is simply how often the system got "reasonably close".
 
@@ -354,6 +317,8 @@ public class MultiValuedRegression extends GPProblem implements SimpleProblemFor
         {
         if (!ind.evaluated)  <font color=gray>// don't bother reevaluating</font>
                 {
+                DoubleData input = (DoubleData)(this.input);
+
                 int hits = 0;
                 double sum = 0.0;
                 double expectedResult;
@@ -373,7 +338,7 @@ public class MultiValuedRegression extends GPProblem implements SimpleProblemFor
 
                 <font color=gray>// the fitness better be KozaFitness!</font>
                 KozaFitness f = ((KozaFitness)ind.fitness);
-                f.setStandardizedFitness(state,(float)sum);
+                f.setStandardizedFitness(state, sum);
                 f.hits = hits;
                 ind.evaluated = true;
                 }
@@ -396,9 +361,8 @@ parent.0 = ../../gp/koza/koza.params
 # We have one function set, of class GPFunctionSet
 gp.fs.size = 1
 gp.fs.0 = ec.gp.GPFunctionSet
-# We'll call the function set "f0".  It uses the default GPFuncInfo class
+# We'll call the function set "f0".
 gp.fs.0.name = f0
-gp.fs.0.info = ec.gp.GPFuncInfo
 
 # We have five functions in the function set.  They are:
 gp.fs.0.size = 5
@@ -419,135 +383,99 @@ gp.fs.0.func.4.nc = nc2
 <tt><pre>
 eval.problem = ec.app.tutorial4.MultiValuedRegression
 eval.problem.data = ec.app.tutorial4.DoubleData
-# The following should almost *always* be the same as eval.problem.data
-# For those who are interested, it defines the data object used internally
-# inside ADF stack contexts
-eval.problem.stack.context.data = ec.app.tutorial4.DoubleData
 </pre></tt>
 
 <h3>Run the Problem</h3>
 
-<p>Save the files and close them.  Compile the java files.  The run the problem with <b>java ec.Evolve -file tutorial4.params -p stat.gather-full=true</b> (because we'd like to see maximal information, and it's not that expensive to compute).
+<p>Save the files and close them.  Compile the java files.  The run the problem with <b>java ec.Evolve -file tutorial4.params</b>
 
-<p>On most Java VM's ECJ should discover the solution in four generations (it's an easy problem).  The out.stat file looks like this:
+<p>On most Java VM's ECJ should discover the solution in about five generations (it's an easy problem).  The out.stat file looks something like this:
 
 <tt><font size=-2><pre>
-Generation 0
-================
-
-Subpopulation 0
-----------------
-Avg Nodes: 24.11328125
-Nodes/tree: [24.11328125]
-Avg Depth: 4.5029296875
-Depth/tree: [4.5029296875]
-Mean fitness raw: 10.727137 adjusted: 0.12187841 hits: 0.2705078125
-
-Best Individual of Generation:
+Generation: 0
+Best Individual:
+Subpopulation 0:
 Evaluated: true
-Fitness: Raw=0.73517203 Adjusted=0.5763117 Hits=2
+Fitness: Standardized=0.9386781035892474 Adjusted=0.5158153889233138 Hits=1
 Tree 0:
- (* (+ (- (+ (- y x) (+ x x)) (+ (- x y) (*
-     y y))) (* (+ (* y y) (* y y)) (+ (- y y)
-     (- y y)))) (+ (+ (+ (+ x y) (* x x)) (* (*
-     y y) (- x x))) (+ (* (- y y) (+ x y)) (*
-     (- y y) (* y y)))))
+ (- (+ (- y x) (+ x x)) (* (* y y) (- x x)))
 
-
-
-Generation 1
-================
-
-Subpopulation 0
-----------------
-Avg Nodes: 19.060546875
-Nodes/tree: [19.060546875]
-Avg Depth: 4.416015625
-Depth/tree: [4.416015625]
-Mean fitness raw: 6.279509 adjusted: 0.18087758 hits: 0.541015625
-
-Best Individual of Generation:
+Generation: 1
+Best Individual:
+Subpopulation 0:
 Evaluated: true
-Fitness: Raw=0.41414043 Adjusted=0.7071433 Hits=6
+Fitness: Standardized=0.7946952005080066 Adjusted=0.5571976788687795 Hits=1
 Tree 0:
- (* (+ (- (+ (- y x) (+ x x)) (+ (- x y) (*
-     y y))) (* (+ (* y y) (* y y)) (+ (- y y)
-     (- y y)))) (+ (+ (+ (+ x y) (* x x)) (* (*
-     y (* x y)) (- x x))) (+ (* (- y y) (+ x y))
-     (* (- y y) (* y y)))))
+ (- (+ y x) (* x x))
 
-
-
-Generation 2
-================
-
-Subpopulation 0
-----------------
-Avg Nodes: 18.21484375
-Nodes/tree: [18.21484375]
-Avg Depth: 4.4716796875
-Depth/tree: [4.4716796875]
-Mean fitness raw: 5.1355796 adjusted: 0.21912025 hits: 0.6796875
-
-Best Individual of Generation:
+Generation: 2
+Best Individual:
+Subpopulation 0:
 Evaluated: true
-Fitness: Raw=0.42874238 Adjusted=0.69991624 Hits=5
+Fitness: Standardized=0.24641565477086902 Adjusted=0.8023005777986895 Hits=6
 Tree 0:
- (- (+ (- (* (* x x) (+ y y)) (* (- y y) (-
-     x y))) (* (- (* x x) (+ y x)) (- (* y x)
-     (+ y x)))) (* (- (- (* y x) (+ y (* x y)))
-     (+ (* y y) (+ x y))) (* (+ (- x x) (* y x))
-     (* (- x y) (- y y)))))
+ (+ (* (* y x) (* x y)) (- (+ (* y x) x) (-
+     x y)))
 
-
-
-Generation 3
-================
-
-Subpopulation 0
-----------------
-Avg Nodes: 22.228515625
-Nodes/tree: [22.228515625]
-Avg Depth: 4.9208984375
-Depth/tree: [4.9208984375]
-Mean fitness raw: 4.6831636 adjusted: 0.25266612 hits: 0.8662109375
-
-Best Individual of Generation:
+Generation: 3
+Best Individual:
+Subpopulation 0:
 Evaluated: true
-Fitness: Raw=0.0 Adjusted=1.0 Hits=10
+Fitness: Standardized=0.24641565477086902 Adjusted=0.8023005777986895 Hits=6
 Tree 0:
- (+ y (+ (* x y) (* y (* x x))))
+ (+ (* (* y x) (* x y)) (- (+ (* y x) x) (-
+     x y)))
 
+Generation: 4
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.3860104397332161 Adjusted=0.7214952869997743 Hits=4
+Tree 0:
+ (- (+ (* x y) y) (* (* y y) (- x x)))
 
-
-Final Statistics
-================
-Total Individuals Evaluated: 4096
+Generation: 5
+Best Individual:
+Subpopulation 0:
+Evaluated: true
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=10
+Tree 0:
+ (+ (* x (+ y (* x y))) y)
 
 Best Individual of Run:
+Subpopulation 0:
 Evaluated: true
-Fitness: Raw=0.0 Adjusted=1.0 Hits=10
+Fitness: Standardized=0.0 Adjusted=1.0 Hits=10
 Tree 0:
- (+ y (+ (* x y) (* y (* x x))))
-
-
-
-Timings
-=======
-Initialization: 0.312 secs total, 24692 nodes, 79141.02 nodes/sec
-Evaluating: 0.221 secs total, 85624 nodes, 387438.9 nodes/sec
-Breeding: 0.614 secs total, 60932 nodes, 99237.78 nodes/sec
-
-
-
-Memory Usage
-==============
-Initialization: 1109.9062 KB total, 24692 nodes, 22.246923 nodes/KB
-Evaluating: 1.6875 KB total, 85624 nodes, 50740.15 nodes/KB
-Breeding: 1782.4219 KB total, 60932 nodes, 34.184948 nodes/KB
+ (+ (* x (+ y (* x y))) y)
 </pre></font></tt>
 
-<p>Wow, only 34.14948 nodes fit in a KB!  That's 30 bytes per node!  Compare this to lil-gp, which uses 4 bytes per node, or 17 bytes for an Ephemeral Random Constant.  And DGPC uses only 1 byte per node.  These are packed array approaches, and compared to them, ECJ is a memory hog.  This is partially due to Java, and partially due to ECJ using a tree structure rather than a packed array structure. The upside is that ECJ's trees are <b>far</b> easier to modify and customize than packed arrays of simple numbers.
+<p>Another option is to print out tabular statistics.  
+We'll change the statistics from the default <a href="../../classdocs/ec/gp/koza/KozaStatistics.html">KozaStatistics</a> to the line-by-line data format of <a href="../../classdocs/ec/gp/koza/KozaShortStatistics.html">KozaShortStatistics</a>.  
+Run the system as <b>java ec.Evolve -file tutorial4.params -p stat=ec.gp.koza.KozaShortStatistics</b> and we might get something like:
+
+<tt><font size=-2><pre>
+0 0.11815579608850547 0.5106663312374864 0.5106663312374864 
+1 0.16516424252767573 0.7553260554636446 0.7553260554636446 
+2 0.2032414840372659 0.6840854153019551 0.7553260554636446 
+3 0.23092182973239558 1.0 1.0 
+</pre></font></tt>
+
+The four columns show the generation number, the mean fitness for the population each generation, the best fitness for the population each generation, and the best fitness so far in the run.  You can extend this with additional statistical columns (describing time and space usage) by saying:  <b>java ec.Evolve -file tutorial4.params -p stat=ec.gp.koza.KozaShortStatistics -p stat.do-size=true -p stat.do-time-true</b>  As a result, you might get something like this:
+
+<tt><font size=-2><pre>
+0 67 22 [ 23.740234375 ] 23 23 9.0 9.0 0.12096272693400785 0.6076038106112858 0.6076038106112858 
+1 14 2 [ 16.232421875 ] 16 19 7.0 7.0 0.17651978477818045 0.6208479277810929 0.6208479277810929 
+2 7 1 [ 13.9375 ] 13 17 13.0 13.0 0.2093994867069308 0.623960607294017 0.623960607294017 
+3 4 1 [ 13.740234375 ] 13 16 11.0 11.0 0.23955326657131645 0.9999999999999998 0.9999999999999998 
+4 5 1 [ 14.25390625 ] 14 16 11.0 11.0 0.2636658620971829 0.9999999999999998 0.9999999999999998 
+5 4 1 [ 13.8359375 ] 13 15 11.0 11.0 0.28518720248196483 1.0 1.0 
+6 3 2 [ 14.99609375 ] 14 15 9.0 9.0 0.3058538096982688 1.0 1.0 
+</pre></font></tt>
+
+<p>Consult the class documentation for <a href="../../classdocs/ec/gp/koza/KozaStatistics.html">KozaStatistics</a>, or more usefully, the ECJ Owner's Manual, to understand these column.  
+
+<p>GPNodes are the dominant part of an ECJ GP process.  If you run this process under memory profiling, you'll find that in Java 7 it takes up about 1500K of space.  That's not a lot but at about 14 GPNodes per individual in generation 3, or about 14300 GPNodes per population, or about 28600 GPNodes in memory at a time during breeding (the prior and current generations), this comes to about 50 bytes per node.  This ignores the non-GPNode memory usage of course: in my experience ECJ takes up about 30 bytes per GPNode.  Compare this to lil-gp, which uses 4 bytes per node, or 17 bytes for an Ephemeral Random Constant.  This is a packed array approach, and compared it, ECJ is a memory hog.  This is partially due to Java, and partially due to ECJ using a tree structure rather than a packed array structure. The upside is that ECJ's trees are <b>far</b> easier to modify and customize than packed arrays of simple numbers.
 
 <p>Since GPNodes absolutely dominate the memory usage, we only bother looking at them.  Here's where the memory goes:
 
@@ -561,21 +489,15 @@ Breeding: 1782.4219 KB total, 60932 nodes, 34.184948 nodes/KB
 <li> 1 byte for the constraints
 </ul>
 
-<p>If you've been counting, that totals to 34 bytes.  HotSpot is clever when dealing with zero-sized arrays, which I believe accounts for the slight lowering in usage.  PLUS: to evolve a population, ECJ must keep around the old population to breed into it.  That doubles your expected memory (GPSYS, another Java-based GP system, jumps through hoops to avoid this necessity).
-
-<p>The net result of this is that GP runs which work fine in 8MB on lil-gp can require 64MB on ECJ.  This was a design decision tradeoff: I decided to run fast and to be highly flexible and powerful rather than be highly compact.  Besides...memory is cheap nowadays!  :-)
+<p>If you've been counting, that totals to 34 bytes.  HotSpot is clever when dealing with zero-sized arrays, which I believe accounts for the slight lowering in usage.  PLUS: to evolve a population, ECJ must keep around the old population to breed into it.  That doubles your expected memory.
 
 <h3>Print out the trees for LaTeX</h3>
 
-Here's a nifty trick.  GPTrees can be printed out in LaTeX form rather than in s-expression form.  Run the system with the following command: <b>java ec.Evolve -file tutorial4.params -p gp.tree.latex=true</b> and the trees will be outputted in a form that can be stuck into a LaTeX file and printed.
+Here's a nifty trick.  GPTrees can be printed out in LaTeX form rather than in s-expression form.  Run the system with the following command: <b>java ec.Evolve -file tutorial4.params -p gp.tree.print-style=latex</b> and the trees will be outputted in a form that can be stuck into a LaTeX file and printed.
 
 <p>The best individual of the generation now looks like this:
 
 <tt><pre>
-Final Statistics
-================
-Total Individuals Evaluated: 4096
-
 Best Individual of Run:
 Evaluated: true
 Fitness: Raw=0.0 Adjusted=1.0 Hits=10
@@ -628,26 +550,15 @@ two children are printed as if the node was an operator (+, *, etc.), and nodes 
 
 <p><tt>(sin(4 + cos(x)) - (x * x)) exp x</tt>
 
-<p>We prefer a Lisp style, but this might be easier for you to read.  To do this, you can run the command like this:  <b>java ec.Evolve -file tutorial4.params -p gp.tree.c=true</b>
+<p>We prefer a Lisp style, but this might be easier for you to read.  To do this, you can run the command like this:  <b>java ec.Evolve -file tutorial4.params -p gp.tree.print-style=c</b>
 
 <h3>Print out the trees in Graphviz</h3>
 
-<p><a href="http://www.research.att.com/sw/tools/graphviz/">Graphviz</a> is a graph-layout language and renderer developed by AT&amp;T.  ECJ can generate trees that Graphviz renders quite nicely to PDF and other formats for inclusion in documents as well.  To do this, you can run the command like this:  <b>java ec.Evolve -file tutorial4.params -p gp.tree.graphviz=true</b>
+<p><a href="http://www.research.att.com/sw/tools/graphviz/">Graphviz</a> is a graph-layout language and renderer developed by AT&amp;T.  ECJ can generate trees that Graphviz renders quite nicely to PDF and other formats for inclusion in documents as well.  To do this, you can run the command like this:  <b>java ec.Evolve -file tutorial4.params -p gp.tree.print-style=dot</b>
 
 <h3>Try some Elitism</h3>
 
-Let's add two more gizmos.  First, we'll make the model elitist, which in this case wil be keeping the two best individuals in the subpopulation 0 of the population (you can specify different elitism values for each subpopulation).  Second, we'll change the statistics from the default <a href="../../classdocs/ec/gp/koza/KozaStatistics.html">KozaStatistics</a> to the line-by-line data format of <a href="../../classdocs/ec/gp/koza/KozaShortStatistics.html">KozaShortStatistics</a>.  We can change both on the command line.  <a href="../../classdocs/ec/simple/SimpleBreeder.html">SimpleBreeder</a> has an elitist feature.  Run the system as <b>java ec.Evolve -file tutorial4.params -p breed.elite.0=2 -p stat=ec.gp.koza.KozaShortStatistics -p stat.gather-full=true</b>
-
-<p>The results are very similar in this case.  Here's the statistics file:
-
-<tt><font size=-2><pre>
-0 377 1137264 99 648 24.11328125 [24.11328125] 24.11328125 4.5029296875 [4.5029296875] 4.5029296875 10.727137 0.12187841 0.2705078125 0.73517203 0.5763117 2 0.73517203 0.5763117 2 
-1 297 929120 80 360 19.060546875 [19.060546875] 21.5869140625 4.416015625 [4.416015625] 4.45947265625 6.279509 0.18087758 0.541015625 0.41414043 0.7071433 6 0.41414043 0.7071433 6 
-2 188 901176 36 360 18.21484375 [18.21484375] 20.462890625 4.4716796875 [4.4716796875] 4.463541666666667 5.1355796 0.21912025 0.6796875 0.42874238 0.69991624 5 0.41414043 0.7071433 6 
-3 273 -783656 40 360 22.228515625 [22.228515625] 20.904296875 4.9208984375 [4.9208984375] 4.577880859375 4.6831636 0.25266612 0.8662109375 0.0 1.0 10 0.0 1.0 10 
-</pre></font></tt>
-
-<p>For information on the specifics of these columns, consult the <a href="../../classdoocs/ec/gp/koza/KozaShortStatistics.html">KozaShortStatistics</a> documentation.
+Now we'll make the model elitist, which in this case will be keeping the two best individuals in the subpopulation 0 of the population (you can specify different elitism values for each subpopulation).  <a href="../../classdocs/ec/simple/SimpleBreeder.html">SimpleBreeder</a> has an elitist feature.  Run the system as <b>java ec.Evolve -file tutorial4.params -p breed.elite.0=2</b>
 
 <p>The symbolic regression example here is fairly simple.  More sophisticated (but one-variable) versions can be found in the <b>ec.app.regression</b> package.  At this point understanding them should be pretty easy.
 

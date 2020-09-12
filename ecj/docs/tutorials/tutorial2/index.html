@@ -26,11 +26,11 @@
 			<p>
 			Go into the <tt>ec/app</tt> directory and create a directory called <tt>tutorial2</tt>. In this directory, create a file called <tt>tutorial2.params</tt>. In this file, add as a first line the following: <tt>
 			<pre>
-parent.0		= ../../simple/simple.params
+parent.0		= ../../../../resources/ec/simple/simple.params
 </pre>
 			</tt>
 			<p>
-			This specifies that <tt>../../simple/simple.params </tt> will be the <b>first parent</b> of our parameter file. This means that if the parameter is not specified in <tt>tutorial.params</tt>, ECJ will next look in <tt>../../simple/simple.params</tt> to find that parameter.
+			This specifies that <tt>../../../../resources/ec/simple/simple.params </tt> will be the <b>first parent</b> of our parameter file. This means that if the parameter is not specified in <tt>tutorial.params</tt>, ECJ will next look in <tt>../../simple/simple.params</tt> to find that parameter.
 			<p>
 			<img src="hierarchy.jpg" valign=top align=right> As discussed in the <a href="../../parameters.html">introduction to Parameter files</a>, ECJ has a particular way of looking up parameters. When a parameter is requested by the system, ECJ tries the following in order:
 			<ol>
@@ -84,24 +84,23 @@ generations = 200
 						<tt>
 						<pre>
 store =                                 true
-verbosity =                             0
 flush =                                 true
 evalthreads =                           1
 breedthreads =                          1
-seed.0 =                                4357
+seed.0 =                                time
 gc =                                    false
 gc-modulo =                             1
 aggressive =                            true
 checkpoint =                            false
 checkpoint-modulo =                     1
-prefix =                                ec
+checkpoint-prefix =                     ec
 </pre>
 						</tt>
 					</td>
 				</tr>
 			</table>
 			<p>
-			You'll notice these are the same parameters that we typed in by hand in Tutorial 1. Now we don't have to. So what <i>do</i> we have to specify? Mostly, we have to specify the representation, problem domain, and breeding pipeline.
+			With the exception of seed.0 = time you'll notice these are the same parameters that we typed in by hand in Tutorial 1. Now we don't have to. So what <i>do</i> we have to specify? Mostly, we have to specify the representation, problem domain, and breeding pipeline. Additionally for tutorial purposes specify seed.0 = 4357.
 			<h3>
 				Define the Representation -- And All About Species
 			</h3>
@@ -128,11 +127,11 @@ pop.subpop.0.species.max-gene 	= 2341212
 </pre>
 			</tt>
 			<p>
-			VectorSpecies requires some parameters: the genome size, the chunk size (which specifies crossover boundaries -- usually it's just 1), the crossover type (if we do crossover), the probability that uniform crossover (if we use it) will cross over a gene, and the probability that a gene will get mutated (if we do mutation). We enter them as follows: <tt>
+			VectorSpecies requires some parameters: the genome size, the chunk size (which specifies crossover boundaries -- usually it's just 1), the crossover type (if we do crossover), the mutation type (we'll pick "reset", which just randomizes the gene), and the probability that a gene will get mutated (if we do mutation). We enter them as follows: <tt>
 			<pre>
 pop.subpop.0.species.genome-size	= 20
 pop.subpop.0.species.crossover-type	= two
-pop.subpop.0.species.crossover-prob	= 1.0
+pop.subpop.0.species.mutation-type      = reset
 pop.subpop.0.species.mutation-prob	= 0.05
 </pre>
 			</tt>
@@ -220,7 +219,6 @@ public class OurMutatorPipeline extends BreedingPipeline
     // right there.  produce(...) returns the number of individuals actually put into inds[]</font>
     public int produce(final int min, 
 		       final int max, 
-		       final int start,
 		       final int subpopulation,
 		       final Individual[] inds,
 		       final EvolutionState state,
@@ -234,29 +232,30 @@ public class OurMutatorPipeline extends BreedingPipeline
 			a BreedingPipeline too, it already copied the individuals for us (keeping <i>it's</i> guarantee).  If
 		  it's a SelectionMethod, the individuals aren't copies but originals, so we need to copy them.
 
-<p>Copying is done through the <tt>deepClone()</tt> method.  This is a method in Individual which is guaranteed to create a deep clone of the individual, except for its Fitness.  Why not use <tt>clone()</tt> instead?  Well, as it turns out, <tt>clone()</tt> usually but
-			doesn't necessarily deep-clone the object.  It does "whatever is appropriate" for breeding.  In
-	 	   some kinds of Individuals, notably <a href="../../classdocs/ec/gp/GPIndividual.html">GPIndividual</a>s, deep-cloning is very expensive,
-			so the breeding methods call a non-deep-clone <tt>clone()</tt> method, then deep-clone
-	     the rest by hand only as needed. 
-Moral of the story: if an object (particularly Individual) offers <tt>deepClone()</tt> as a method,
-and you need to deep clone, use that method instead of <tt>clone()</tt>.  Here's the relevant code:
+<p>First we need to figure out how many individuals we'll produce.  We can do this in two ways.  First, we could compute how many individuals we want beforehand: for example, Crossover operations typicaly produce two individuals no matter what, unless they're forced to (say) produce a single individual.  But since we're making a mutator, we'll take a different tack: we simply ask our sources to produce some number of individuals (their choice), then we mutate all those individuals and return them.  In this case, we first produce the individuals, and the variable <b>n</b> is set to how many were created:
+
 
 <tt><pre>
+        int start = inds.size();  // the index of the first individual we'll be adding (for later reference)
+        
         <font color=gray>// grab individuals from our source and stick 'em right into inds.
         // we'll modify them from there</font>
-        int n = sources[0].produce(min,max,start,subpopulation,inds,state,thread);
+        int n = sources[0].produce(min,max,subpopulation,inds,state,thread);
+</pre></tt>
 
-        <font color=gray>// clone the individuals if necessary -- if our source is a BreedingPipeline
-        // they've already been cloned, but if the source is a SelectionMethod, the
-        // individuals are actual individuals from the previous population</font>
-        if (!(sources[0] instanceof BreedingPipeline))
-            for(int q=start;q&lt;n+start;q++)
-                inds[q] = (Individual)(inds[q].deepClone());
- </pre></tt>
+<p>Next we need to determine if we should bother mutating these individuals at all.  With a certain probability we will just return the individuals unmutated:
 
-<p>Next we'll test to make certain that the individuals are in fact IntegerVectorIndividuals.  It's a quick hack of a test, not a complete one, but usually the complete one is unnecessary.  We'll also extract
-	the IntegerVectorSpecies object the individuals are sharing, so we can get the <tt>mutationProbability</tt>
+<tt><pre>
+	<font color=gray>// should we bother?<font>
+	if (!state.random[thread].nextBoolean(likelihood))
+		{
+		return n;
+		}
+</pre></tt>
+
+<p>If we've gotten this far, it's time to actually mutate the individuals we got from our source. 
+   We first test to make certain that the individuals are in fact IntegerVectorIndividuals.  It's a quick hack of a test, not a complete one, but usually the complete one is unnecessary.  We'll also extract
+	the IntegerVectorSpecies object the individuals are sharing, so we can get the per-gene <tt>mutationProbability</tt>
 	value out of it.
 
 <tt><pre>
@@ -275,7 +274,7 @@ and you need to deep clone, use that method instead of <tt>clone()</tt>.  Here's
  </pre></tt>
 
 <p>Now we're ready to go through the individuals and mutate them.  For each gene in each individual,
-we'll flip a coin of <tt>mutationProbability</tt>, and change the sign of the gene if it comes up heads.
+we'll flip a coin of per-gene <tt>mutationProbability</tt>, and change the sign of the gene if it comes up heads.
 We set the flag in the individual indicating that its evaluation is invalid and needs to be reevaluated.
 Finally, we'll return the number of individuals we created (<tt>n</tt>), and the class is done:
 
@@ -285,7 +284,7 @@ Finally, we'll return the number of individuals we created (<tt>n</tt>), and the
             {
             IntegerVectorIndividual i = (IntegerVectorIndividual)inds[q];
             for(int x=0;x&lt;i.genome.length;x++)
-                if (state.random[thread].nextBoolean(species.mutationProbability))
+                if (state.random[thread].nextBoolean(species.mutationProbability(x)))
                     i.genome[x] = -i.genome[x];
             <font color=gray>// it's a "new" individual, so it's no longer been evaluated</font>
             i.evaluated=false;
@@ -342,20 +341,12 @@ public class AddSubtract extends Problem implements SimpleProblemForm
         if (!(ind2.fitness instanceof SimpleFitness))
             state.output.fatal("Whoa!  It's not a SimpleFitness!!!",null);
         ((SimpleFitness)ind2.fitness).setFitness(state,
-                <font color= gray >// what the heck, lets normalize the fitness for genome length
-                // so it's within float range</font>
-                (float)(((double)rawfitness)/ind2.genome.length),
+                <font color= gray >// what the heck, lets normalize the fitness for genome length</font>
+                ((double)rawfitness)/ind2.genome.length,
                 <font color= gray >//... is the individual ideal?  Indicate here...</font>
                 false);
         ind2.evaluated = true;
         }
-    
-    public void describe(final Individual ind, 
-                         final EvolutionState state, 
-                         final int subpopulation,
-                         final int threadnum,
-                         final int log,
-                         final int verbosity)    { }
     }
 </pre></tt>
 
@@ -373,14 +364,14 @@ eval.problem            = ec.app.tutorial2.AddSubtract
 java ec.Evolve -file tutorial2.params
 </pre></tt>
 
-<p>Because Java no longer guarantees exact floating point results, the final result may vary from platform to platform, but as far as I am aware, the only JVM which gives different results from the others is Microsoft's JVM.  On a non-Microsoft JVM the last few lines of the out.stat file says
+<p>Because Java no longer guarantees exact floating point results, the final result may vary from platform to platform, but as far as I am aware, the only JVM which gives different results from the others is Microsoft's older JVM.  On a non-Microsoft JVM the last few lines of the out.stat file says
 
 <tt><pre>
 Best Individual of Run:
-Evaluated: true
-Fitness: 1430113.9
- 1777241 -955954 760157 -1180365 2011420 -2018763 1458181 491644 521531 -1835900 
- 819498 -2134796 1707889 -1326509 2324432 -1148173 1809439 -2129740 2031426 -1142507
+Subpopulation 0:
+Evaluated: T
+Fitness: 1328937.4
+-2109611 1506982 -1619349 -422340 -1215817 2311577 -2274133 824791 -897177 1507724 1558730 2287338 -914940 2337825 -2002770 1915314 -2239144 941224 -1103088 551014
 </pre></tt>
 
 <p>Now, let's run this with two simulataneous threads.  This would be useful in particular if you have a multiprocessor computer. You can multithread the evaluation process, the breeding process, or both.  Let's do both.  When you have more than one thread, you need to have more than one seed.  We have only specified one seed (seed.0=4357).  So we'll need to specify a second one.  We'll add the parameters on the command line, though of course you could add them to your parameter file:
@@ -393,10 +384,10 @@ java ec.Evolve -file tutorial2.params -p breedthreads=2 -p evalthreads=2 -p seed
 
 <tt><pre>
 Best Individual of Run:
-Evaluated: true
-Fitness: 1134800.9
- -2144673 -1202304 -529156 1934348 -2266614 1518874 -523776 1940636 -1432431 -537864 
- -982131 195106 -2023895 1775415 -198611 1216088 -2125361 1065844 -1420719 1142507
+Subpopulation 0:
+Evaluated: T
+Fitness: 1319626.5
+2124789 -2138310 516537 200535 2272817 -603010 1817772 -2297983 1809286 -2259884 674488 42054 323646 -506085 1863075 -2047703 1955544 -1371816 2316829 264455
 </pre></tt>
 
 <p>Even though the process is multithreaded, it's been arranged so that the results will be the same across runs with the same initial seeds.  Try running it again and see for yourself.
@@ -417,7 +408,6 @@ java ec.Evolve -file tutorial2.params -p print-params=true
 
 <tt><pre>
         P: store = true
-        P: verbosity = 0
         P: flush = true
         P: breedthreads = 1
         P: evalthreads = 1
@@ -440,7 +430,7 @@ Threads:  breed/1 eval/1
 Seed: 4357 
 Setting up
         P: checkpoint = false
-        P: prefix = ec
+        P: checkpoint-prefix = ec
         P: checkpoint-modulo = 1
         P: gc-modulo = 1
         P: generations = 200

@@ -29,6 +29,3 @@ tmp_a.txt
 
 #ignore CSV outputs
 *.csv
-
-#ignore output folder
-output
