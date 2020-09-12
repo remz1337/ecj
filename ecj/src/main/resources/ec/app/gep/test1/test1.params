@@ -57,6 +57,7 @@ gep.species.symbolset.function.3 = Div
 stat =				ec.gep.GEPSimpleStatistics
 stat.file =			test1.stat
 
+prefix = test1cp
 
 
 
