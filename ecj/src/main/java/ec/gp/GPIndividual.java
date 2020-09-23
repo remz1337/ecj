@@ -94,7 +94,7 @@ public class GPIndividual extends Individual
     public static final String P_TREE = "tree";
     
     public GPTree[] trees;//genotype
-    public String phenotype;
+    //public String phenotype;
     
     public Parameter defaultBase()
         {

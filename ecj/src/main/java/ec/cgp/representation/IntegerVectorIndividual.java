@@ -68,7 +68,7 @@ public class IntegerVectorIndividual extends VectorIndividualCGP {
 		StringBuffer sb = new StringBuffer("");
 		for (int i = 0; i < genome.length; i++)
 			sb.append(" " + genome[i]);
-		sb.append(". Expression: " + expression);
+		//sb.append(". Expression: " + expression);
 		return sb.toString();
 	}
 

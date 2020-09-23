@@ -85,6 +85,9 @@ public abstract class Individual implements Prototype, Comparable<Individual>
     /** The fitness of the Individual. */
     public Fitness fitness;
 
+    // functional phenotype (output of evaluation)
+    public String phenotype;
+
     /** The species of the Individual.*/
     public Species species;
     

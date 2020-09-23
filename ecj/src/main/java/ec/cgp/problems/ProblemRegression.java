@@ -1,6 +1,7 @@
 package ec.cgp.problems;
 
 import ec.*;
+import ec.gp.GPIndividual;
 import ec.simple.*;
 import ec.util.*;
 import ec.vector.*;
@@ -23,6 +24,8 @@ public class ProblemRegression extends ProblemCGP {
 	
 	/** Which function to use.  Acceptable values: {1, 2, 3}. */
 	public int function;
+
+	public ArrayList<Float> phenotype;
 	
 	static String P_WHICH = "which";
 	
@@ -40,6 +43,7 @@ public class ProblemRegression extends ProblemCGP {
 		if (ind.evaluated)
 			return;
 
+		phenotype = new ArrayList<Float>();
 		VectorSpeciesCGP s = (VectorSpeciesCGP) ind.species;
 		VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
 		
@@ -62,8 +66,10 @@ public class ProblemRegression extends ProblemCGP {
 			
 			/* compute error */
 			diff += Math.abs((Float)outputs[0] - fn);
+			phenotype.add((Float)outputs[0]);
 		}
 		((FitnessCGP)ind.fitness).setFitness(state, diff, diff <= 0.01); // stop if error is less than 1%.
+		ind.phenotype=phenotype.toString();
 		
 		ind.evaluated = true;
 	}
@@ -87,6 +93,8 @@ public class ProblemRegression extends ProblemCGP {
 		super.setup(state, base);
 		
 		Parameter def = defaultBase();
+
+		phenotype = new ArrayList<Float>();
         
         function = state.parameters.getInt(base.push(P_WHICH),def.push(P_WHICH),1);
         if (function == 0)
