@@ -263,12 +263,59 @@ public class GEPChromosome implements Cloneable
     
     public String genotypeToStringForHumans()
     {
-			String s = "Linking function: " + ((GEPSpecies)myGEPIndividual.species).linkingFunctionName + "\n";
-			s = s + genotypeToStringForHumansKarva();
-			s = s + "\n" + genotypeToStringForHumansMathExpression();
-			s = s + "\n";
-			return s;
+			//String s = "Linking function: " + ((GEPSpecies)myGEPIndividual.species).linkingFunctionName + "\n";
+			//s = s + genotypeToStringForHumansKarva();
+			//s = s + "\n" + genotypeToStringForHumansMathExpression();
+			// s + "\n";
+			//return s;
+        return genotypeToStringForHumansVRE();
     }
+
+    public String genotypeToStringForHumansVRE()
+    {
+        try {
+            String s = "";
+            for( int i=0 ; i<genome.length ; i++ )
+            {
+                //s = s + "Gene " + i + "\n";
+                int constantIndex = 0;
+                GEPSpecies species = (GEPSpecies)this.myGEPIndividual.species;
+
+                if(i>0){
+                    s = s + " " + species.linkingFunctionSymbol.symbol + " ";
+                }
+
+                for (int j=0; j<genome[i].length; j++)
+                {	String thePrintableSymbol;
+                    GEPSymbol sym = species.symbolSet.symbols[genome[i][j]];
+                    // the gene could have more than genomeDc[i].length constants
+                    // in it BUT the extras could never be used in an expression so
+                    // for those print C?
+                    if (sym instanceof GEPConstantTerminalSymbol)
+                        thePrintableSymbol = "C" +
+                                ((constantIndex < genomeDc[i].length) ? String.valueOf(genomeDc[i][constantIndex++]) : "?");
+                    else
+                        thePrintableSymbol = sym.symbol;
+                    s = s + (j==0 ? "" : " ") + thePrintableSymbol;
+                }
+                // the constants if any
+                if (species.useConstants)
+                {
+                    //s = s + "\n";
+                    for (int k=0; k<genomeConstants[i].length; k++)
+                        s = s + "C" + k + ": " + genomeConstants[i][k] + "\n";
+                }
+                //else
+                //	s = s + "\n";
+            }
+            return s;
+        } catch (RuntimeException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "";
+        }
+    }
+
         
     public String genotypeToStringForHumansKarva()
     {

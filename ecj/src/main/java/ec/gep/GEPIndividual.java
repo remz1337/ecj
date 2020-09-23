@@ -257,7 +257,7 @@ public class GEPIndividual extends Individual
     
     public String genotypeToStringForHumans()
     {
-			String s = "Linking function: " + ((GEPSpecies)species).linkingFunctionName + "\n";
+			/*String s = "Linking function: " + ((GEPSpecies)species).linkingFunctionName + "\n";
 			s = s + "\nGEP-MODEL\n";
 			s = s + "KARVA\n" + genotypeToStringForHumansKarva();
 			String mathExpression = genotypeToStringForHumansMathExpression();
@@ -268,9 +268,37 @@ public class GEPIndividual extends Individual
 				s = s + "\nMATH (SIMPLIFIED)\n" + mathSimplifiedExpression;
 			}			
 			s = s + "\n";
-			return s;
+			return s;*/
+
+		String s = "Genotype:" + "\n";
+		s = s + genotypeToStringForHumansVRE();
+		return s;
     }
-        
+
+	public String genotypeToStringForHumansVRE()
+	{
+		try
+		{
+			int numChromosomes = chromosomes.length;
+			String s = "";
+			if (numChromosomes > 1)
+				s = "Number of chromosomes: " + numChromosomes + "\n\n";
+			for( int i=0 ; i<numChromosomes ; i++ )
+			{
+				int j = i+1;
+				if (numChromosomes > 1)
+					s = s + "Chromosome " + j + ":\n";
+				s = s + chromosomes[i].genotypeToStringForHumansVRE() + "\n";
+			}
+			return s;
+		} catch (RuntimeException e) {
+			e.printStackTrace();
+			return "";
+		}
+	}
+
+
+
     public String genotypeToStringForHumansKarva()
     {
         try 
