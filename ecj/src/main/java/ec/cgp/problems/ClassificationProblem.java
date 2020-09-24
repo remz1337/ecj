@@ -223,7 +223,7 @@ public abstract class ClassificationProblem extends ProblemCGP {
 	boolean[] eval(EvolutionState state, int threadnum, Object[] inputs,
 			Record rec, VectorIndividualCGP ind) {
 		setInputs(inputs, rec);
-		Object[] outputs = Evaluator.evaluate(state, threadnum, inputs, ind);
+		Object[] outputs = Evaluator.evaluate(state, threadnum, inputs, ind, this);
 		return compare(outputs, rec);
 	}
 

@@ -1,6 +1,8 @@
 package ec.cgp.functions;
 
 
+import ec.Problem;
+
 /**
  *
  * Function set for the regression problems.
@@ -20,7 +22,7 @@ public class FunctionsRegression implements Functions {
 	static int F_DIV = 3;
 	
 	/** Interpret the given function and apply it to the given inputs. */
-	public Object callFunction(Object[] inputs, int function, int numFunctions) {
+	public Object callFunction(Object[] inputs, int function, int numFunctions, final Problem prob) {
 		if (function == F_ADD) {
 			return (Float)inputs[0] + (Float)inputs[1];
 		} else if (function == F_SUB) {

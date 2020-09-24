@@ -60,7 +60,7 @@ public class ProblemParity extends ProblemCGP {
 			}
 
 			/* evaluate CGP */
-			Object[] outputs = Evaluator.evaluate(state, threadnum, inputs, ind2);
+			Object[] outputs = Evaluator.evaluate(state, threadnum, inputs, ind2, this);
 			Boolean result = (Boolean) outputs[0];
 			
 			sb.append(result ? "1 " : "0 ");

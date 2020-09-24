@@ -1,6 +1,8 @@
 package ec.cgp.functions;
 
 
+import ec.Problem;
+
 /**
  * 
  * Function set for the even-n-parity problem.
@@ -22,7 +24,7 @@ public class FunctionsParity implements Functions {
 	static int F_NAND = 4;
 
 	/** Interpret the given function and apply it to the given inputs. */
-	public Object callFunction(Object[] inputs, int function, int numFunctions) {
+	public Object callFunction(Object[] inputs, int function, int numFunctions, final Problem prob) {
 		if (function == F_AND) {
 			return (Boolean) inputs[0] & (Boolean) inputs[1];
 		} else if (function == F_OR) {

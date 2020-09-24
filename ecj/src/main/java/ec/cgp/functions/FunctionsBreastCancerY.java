@@ -1,6 +1,7 @@
 package ec.cgp.functions;
 
 
+import ec.Problem;
 import ec.util.MersenneTwisterFast;
 
 /**
@@ -50,7 +51,7 @@ public class FunctionsBreastCancerY implements Functions {
 	static int F_IFLEZ = 16;
 
 	/** Interpret the given function and apply it to the given inputs. */
-	public Object callFunction(Object[] inputs, int function, int numFunctions) {
+	public Object callFunction(Object[] inputs, int function, int numFunctions, final Problem prob) {
 		float[] arg = new float[inputs.length];
 		for (int i = 0; i < inputs.length; i++)
 			if (!(inputs[i] instanceof Float))
@@ -211,7 +212,7 @@ public class FunctionsBreastCancerY implements Functions {
 					2f * (.5f - rand.nextFloat()) };
 			for (int j = 0; j < 15; j++) {
 				System.out.println(inputs[0] + " " + f.functionName(j) + " "
-						+ inputs[1] + " = " + f.callFunction(inputs, j, 15));
+						+ inputs[1] + " = " + f.callFunction(inputs, j, 15, null));
 
 			}
 		}

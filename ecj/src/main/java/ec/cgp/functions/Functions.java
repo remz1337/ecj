@@ -1,5 +1,7 @@
 package ec.cgp.functions;
 
+import ec.Problem;
+
 /**
  * This interface defines how the Cartesian Genetic Program evaluator calls
  * user-defined functions when they are encountered in the genome. You must
@@ -24,7 +26,7 @@ public interface Functions {
 	 *            The total number of functions available.
 	 * @return the result of the function call
 	 */
-	public Object callFunction(Object[] inputs, int function, int numFunctions);
+	public Object callFunction(Object[] inputs, int function, int numFunctions, final Problem prob);
 
 	/**
 	 * Return a string representation of the given function name, used when

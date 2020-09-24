@@ -4,8 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import ec.EvolutionState;
+import ec.Problem;
 import ec.cgp.functions.Functions;
+import ec.cgp.functions.FunctionsAnt2;
+import ec.cgp.problems.ProblemAnt2;
 import ec.cgp.representation.FloatVectorIndividual;
 import ec.cgp.representation.IntegerVectorIndividual;
 import ec.cgp.representation.VectorIndividualCGP;
@@ -52,7 +56,7 @@ public class Evaluator {
 	 * @return array of computed outputs from our Cartesian genetic program
 	 */
 	public static Object[] evaluate(EvolutionState state, int threadNum,
-			Object[] inputs, VectorIndividualCGP ind) {
+			Object[] inputs, VectorIndividualCGP ind, final Problem prob) {
 		nodeMap.get(threadNum).clear();
 		expressionMap.get(threadNum).clear();
 		
@@ -81,7 +85,7 @@ public class Evaluator {
 			add(expression, sb, "o" + i + " = ");
 			outputs[i] = evalNode(threadNum, expression, inputs, sb, ind
 					.getGenome(), isFloat ? s.interpretFloat(gf.length - 1 - i,
-					gf) : gi[gi.length - 1 - i], s);
+					gf) : gi[gi.length - 1 - i], s, prob);
 		}
 
 		if (expression)
@@ -111,7 +115,7 @@ public class Evaluator {
 	 */
 	private static Object evalNode(int threadNum, boolean expression,
 			Object[] inputs, StringBuffer expr, Object genome, int nodeNum,
-			VectorSpeciesCGP s) {
+			VectorSpeciesCGP s, final Problem prob) {
 		Object val = nodeMap.get(threadNum).get(nodeNum);
 		if (val != null) { /* We've already computed this node. */
 			if (expression) /* append the already-computed expression string. */
@@ -132,6 +136,9 @@ public class Evaluator {
 				expressionMap.get(threadNum).put(nodeNum, sb.toString());
 				expr.append(sb);
 			}
+			if(prob instanceof ProblemAnt2){
+				FunctionsAnt2.ExecuteAction((String)inputs[nodeNum],prob);
+			}
 			return inputs[nodeNum];
 		}
 		boolean isFloat = genome instanceof float[];
@@ -140,7 +147,8 @@ public class Evaluator {
 				: ((int[]) genome)[pos]);
 		add(expression, sb, functions.functionName(fn));
 
-		Object[] args = new Object[s.maxArity];
+		//Object[] args = new Object[s.maxArity];
+		Argument[] args = new Argument[s.maxArity];
 		for (int i = 0; i < functions.arityOf(fn); i++) { // eval each argument of the function
 			int argInt = 0;
 			float argFloat = 0;
@@ -153,19 +161,21 @@ public class Evaluator {
 			int num = isFloat ? s.interpretFloat(pos + i + 1, (float[]) genome)
 					: argInt;
 			if (num < s.numInputs) { // argument refers to an input (terminal) node.
-				args[i] = inputs[num];
+				args[i] =new Argument(inputs[num],true);
+				//args[i].input = inputs[num];
+				//args[i].isLeaf = true;
 				add(expression, sb, " " + functions.inputName(num, inputs[num]));
 			} else { // argument refers to a function node.
-
 				add(expression, sb, " (");
-				args[i] = evalNode(threadNum, expression, inputs, sb, genome,
-						num, s);
+				args[i] =new Argument(evalNode(threadNum, expression, inputs, sb, genome, num, s, prob),false);
+				//args[i].input = evalNode(threadNum, expression, inputs, sb, genome, num, s, prob);
+				//args[i].isLeaf=false;
 				add(expression, sb, ")");
 			}
 		}
 		
 		/* The arguments are ready now.  So, run the function. */
-		Object result = functions.callFunction(args, fn, s.numFunctions);
+		Object result = functions.callFunction(args, fn, s.numFunctions, prob);
 		
 		nodeMap.get(threadNum).put(nodeNum, result);
 		if (expression) {

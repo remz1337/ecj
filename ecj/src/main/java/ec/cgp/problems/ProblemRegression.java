@@ -57,7 +57,7 @@ public class ProblemRegression extends ProblemCGP {
 			inputs[1] = 1.0f; // a hard-coded fixed constant value
 
 			/* run the CGP */
-			Object[] outputs = Evaluator.evaluate(state, threadnum, inputs, ind2);
+			Object[] outputs = Evaluator.evaluate(state, threadnum, inputs, ind2, this);
 			
 			/* compare to the real function value */
 			if (function == 1) fn = function1(testPoints[i]);

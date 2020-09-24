@@ -1,6 +1,14 @@
+#
+# Evolves a real-valued function that produces outputs matching some known 
+# function's values given a set of input values.
+#
+# Representation: Integer-based Cartesian Genetic Programming.
+# Algorithm: 1+4 ES.  Parent is selected uniformly at random
+# from set of individuals with fitness equal to top fitness of
+# generation.
+# 
 parent.0 = simple-cgp.params
-
-stat.file = $breast-y.float.1+4.params.out.stat
+stat.file = $ant2.int.1+4.params.out.stat
 
 #================================================================================
 # Set up 1+4 evolutionary strategy
@@ -22,8 +30,8 @@ pop.subpop.0 = ec.Subpopulation
 # modify es.mu and es.lambda.
 #================================================================================
 pop.subpop.0.size = 5
-pop.subpop.0.species = ec.cgp.representation.FloatVectorSpecies
-pop.subpop.0.species.ind = ec.cgp.representation.FloatVectorIndividual
+pop.subpop.0.species = ec.cgp.representation.IntegerVectorSpecies
+pop.subpop.0.species.ind = ec.cgp.representation.IntegerVectorIndividual
 
 #================================================================================
 # Our own fitness.  A simple modification that makes smaller fitnesses better.
@@ -31,7 +39,7 @@ pop.subpop.0.species.ind = ec.cgp.representation.FloatVectorIndividual
 pop.subpop.0.species.fitness = ec.cgp.FitnessCGP
 
 #================================================================================
-# A 4% mutation rate seems effective for this problem.
+# Mutation rate.
 #================================================================================
 pop.subpop.0.species.mutation-prob = .04
 
@@ -40,23 +48,22 @@ pop.subpop.0.species.mutation-prob = .04
 # Function lookup table class for use by the CGP function evaluator.
 # This class is expected to implement CGPFunctions.
 #================================================================================
-pop.subpop.0.species.functions = ec.cgp.functions.FunctionsBreastCancerY
+pop.subpop.0.species.functions = ec.cgp.functions.FunctionsAnt2
 
 # number of functions in your lookup table
-pop.subpop.0.species.num-functions = 17
+pop.subpop.0.species.num-functions = 2
 
 # number of nodes in your CGP, not including inputs and outputs.
-pop.subpop.0.species.nodes = 250
+pop.subpop.0.species.nodes = 20
 
 # number of input nodes in your CGP.  Your problem class feeds these inputs to the CGPEvaluator. 
-# 4 inputs, 8 constants
-pop.subpop.0.species.inputs = 12  
+pop.subpop.0.species.inputs = 3
 
 # number of output nodes in your CGP.  Your problem class extracts these outputs from the CGPEvaluator.
 pop.subpop.0.species.outputs = 1  
 
 # max number of inputs for all functions in your function lookup table.
-pop.subpop.0.species.maxArity = 3
+pop.subpop.0.species.maxArity = 2
 
 #================================================================================
 # The breeding pipeline is a simple mu+lambda ES.  First, the best individual is 
@@ -71,24 +78,34 @@ pop.subpop.0.species.pipe.source.0 = ec.cgp.ESSelectionCGP
 
 
 #================================================================================
-# Class that sets up the classification problem.  Invokes the CGPEvaluator on all
+# Class that sets up the regression problem.  Invokes the CGPEvaluator on all
 # possible boolean inputs.  The CGPEvaluator computes the output value of the 
 # function represented by the genome.  
 #================================================================================
-eval.problem = ec.cgp.problems.ProblemBreastCancerY
-problem.file = C:/Users/rbedardcouture/source/repos/ecj/ecj/src/main/resources/ec/cgp/data/breast/breast-cancer.arff
+eval.problem = ec.cgp.problems.ProblemAnt2
 
-# number of ephemeral random constants, C, to use in your CGP.  They are generated before the run, and are placed in the last C slots of the input vector. 
-# Ensure that this value is not greater than the number of the inputs!
-problem.constants = 8
+# Identifies which function you want to use for regression
+#problem.which = 1
 
-# Define the range of constant values.  It is the half-open range [constant-min, constant-max).
-problem.constant-min = -2.0
-problem.constant-max = 2.0
+# Because our GPData is completely empty, we can just use
+# GPData directly
+eval.problem.data = ec.gp.GPData
 
+# Here we determine what kind of Ant we're doing:
+
+# no progn4, 400 moves, Santa Fe trail
+#gp.fs.0.size = 6
+eval.problem.moves = 400
+eval.problem.file = santafe.trl
 
 #================================================================================
 # Our custom stats class prints out newly discovered best-of run individuals
 # as they are discovered.
 #================================================================================
+stat.file = $ant2.int.1+4.params.out.stat
 stat = ec.cgp.Stats
+
+# Export population to file through statistics
+stat.num-children      = 1
+stat.child.0           = ec.cgp.VREStats
+stat.child.0.VRE-CSV = cgpvre.csv
