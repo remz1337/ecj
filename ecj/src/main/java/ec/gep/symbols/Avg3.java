@@ -1,6 +1,7 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
+import ec.gep.GEPProblem;
 
 /**
  * The average of 3 parameters.
@@ -22,7 +23,7 @@ public class Avg3 extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return average(params[0],params[1], params[2])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob)
 	{
 		//should check that there are 3 params
 		return ((params[0] + params[1] + params[2])/3.0);

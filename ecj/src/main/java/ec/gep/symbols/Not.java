@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * The logical not of 1 parameter.
@@ -22,7 +22,7 @@ public class Not extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s) -- 0 is treated as false, other values as true
 	 * @return !(params[0])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there is 1 param
 		return ((params[0] == 0.0) ? 1.0 : 0.0);

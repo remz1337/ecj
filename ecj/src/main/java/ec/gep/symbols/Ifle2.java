@@ -1,6 +1,7 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
+import ec.gep.GEPProblem;
 
 /**
  * If (x <= y) then x else y
@@ -23,7 +24,7 @@ public class Ifle2 extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return Ifle2(params[0], params[1])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob)
 	{
 		//should check that there are 2 params
 		double p1 = params[0];

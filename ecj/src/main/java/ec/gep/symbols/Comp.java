@@ -1,6 +1,7 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
+import ec.gep.GEPProblem;
 
 /**
  * The complement value of a single parameter (1-value) Only makes sense if value is 0 or 1..
@@ -22,7 +23,7 @@ public class Comp extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return 1-params[0])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob)
 	{
 		//should check that there is only 1 paramater
 		return (1-params[0]);

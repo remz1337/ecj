@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * The logarithm (base 10) of a single parameter  log10(x).
@@ -22,7 +22,7 @@ public class Log extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return log10(params[0])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there is only 1 paramater
 		return (Math.log10(params[0]));

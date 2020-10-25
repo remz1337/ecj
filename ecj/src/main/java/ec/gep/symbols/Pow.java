@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * The value of the 1st parameter raised to a power specified by a second parameter.
@@ -22,7 +22,7 @@ public class Pow extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return pow(params[0], params[1])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there are exactly 2 paramaters
 		return (Math.pow(params[0], params[1]));

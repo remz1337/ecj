@@ -83,6 +83,7 @@ public class GEPSpecies extends Species
     public final static int PT_CLASSIFICATION = 1;
     public final static int PT_LOGICAL = 2;
     public final static int PT_TIMESERIES = 3;
+    public final static int PT_CONTROL = 4;
     
     // For use in determining the gene 'linking' function --- historical only since this was early way of specifying linking functions
     public final static int LF_FIELDSIZE_IN_LINKINGFUNCTIONS = 5;
@@ -117,8 +118,8 @@ public class GEPSpecies extends Species
     /** Problem type, one of: PT_FUNCTIONFINDING, PT_CLASSIFICATION, PT_LOGICAL, PT_TIMESERIES. */
     public int problemType = -1;  // initially not known
     // problemTypeNames and problemTypeIds must match their elements
-    String problemTypeNames[] = {"functionfinding", "classification", "timeseries", "logical"};
-    public int problemTypeIds[] = {PT_FUNCTIONFINDING, PT_CLASSIFICATION, PT_TIMESERIES, PT_LOGICAL};
+    String problemTypeNames[] = {"functionfinding", "classification", "timeseries", "logical", "control"};
+    public int problemTypeIds[] = {PT_FUNCTIONFINDING, PT_CLASSIFICATION, PT_TIMESERIES, PT_LOGICAL, PT_CONTROL};
     public String problemTypeName = "";
 
     /**
@@ -313,7 +314,7 @@ public class GEPSpecies extends Species
         	}
         }
         if (problemType<0)
-        	state.output.fatal("Must specify a problem type as one of: functionfinding, classification, timeseries, logical",
+        	state.output.fatal("Must specify a problem type as one of: functionfinding, classification, timeseries, logical, control",
             		base.push(P_PROBLEMTYPE),def.push(P_PROBLEMTYPE)); 
 
         //*************************************************************************************

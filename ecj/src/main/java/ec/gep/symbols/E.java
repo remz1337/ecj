@@ -1,6 +1,7 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
+import ec.gep.GEPProblem;
 
 /**
  * The value E (2.71828...)
@@ -22,7 +23,7 @@ public class E extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return (E)
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob)
 	{
 		//should check that there is only 1 paramater ... but it is really a constant ... 0 args!
 		// This is oddity of GeneXPro ... 1 arg rather than 0!

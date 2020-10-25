@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * The logical nand of 2 parameters.
@@ -22,7 +22,7 @@ public class Nand extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s) -- 0 is treated as false, other values as true
 	 * @return !(params[0] && params[1])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there are 2 params
 		boolean p1 = params[0] == 0.0 ? false : true;

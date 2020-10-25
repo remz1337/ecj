@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * The cube root value of a single parameter.
@@ -22,7 +22,7 @@ public class Cubert extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return cubeRoot(params[0])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there is only 1 paramater
 		return (Math.cbrt(params[0]));

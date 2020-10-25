@@ -1,6 +1,7 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
+import ec.gep.GEPProblem;
 
 /**
  * The logarithm (to a specified base)   log(x, base).
@@ -22,7 +23,7 @@ public class Log2 extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return log2(params[0], params[1])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob)
 	{
 		//should check that there are exactly 2 paramaters
 		// param 0 is the value, param 1 is the base

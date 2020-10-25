@@ -112,7 +112,7 @@ public class GEPExpressionTreeNode implements Serializable, Cloneable
      * @param valuesIndex For which set of data should we evaluate the expression.
      * @return the evaluated expression
      */
-    public double eval(boolean useTrainingData, int valuesIndex)
+    public double eval(boolean useTrainingData, int valuesIndex, GEPProblem... prob)
     {
     	// If we encounter + or - infinity or NaN as a result of any parameter
     	// we can't rely on the result of the expression evaluation
@@ -126,12 +126,13 @@ public class GEPExpressionTreeNode implements Serializable, Cloneable
     	// evaluator for the function with these paramaters.
     	for (int i=0; i<numParameters; i++)
     	{
-    		evaluatedParameters[i] =  parameters[i].eval(useTrainingData, valuesIndex);
+    		evaluatedParameters[i] =  parameters[i].eval(useTrainingData, valuesIndex, prob);
     		if (Double.isInfinite(evaluatedParameters[i]) || Double.isNaN(evaluatedParameters[i]))
     			return Double.NaN;
     	}
 
-    	return ((GEPFunctionSymbol)symbol).eval(evaluatedParameters);
+    	//Add problem as additional parameter
+    	return ((GEPFunctionSymbol)symbol).eval(evaluatedParameters, prob);
     }
     
     

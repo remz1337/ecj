@@ -34,9 +34,9 @@ package ec.gep;
   */
 
 
-public abstract class GEPFunctionSymbol extends GEPSymbol 
-{	
-	public GEPFunctionSymbol( String symbolName, int numArgs) 
+public abstract class GEPFunctionSymbolAnt extends GEPSymbol
+{
+	public GEPFunctionSymbolAnt(String symbolName, int numArgs)
 	{
 		arity = numArgs; // must be > 0
 			
@@ -50,7 +50,7 @@ public abstract class GEPFunctionSymbol extends GEPSymbol
 	 * @param parameters values used to calculate the value of the function
 	 * @return the calculated value
 	 */
-    public abstract double eval(double parameters[], GEPProblem... prob);
+    public abstract Object eval(Object parameters[]);
     
     public abstract boolean isLogicalFunction();
     

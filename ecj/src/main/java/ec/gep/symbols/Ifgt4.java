@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * If (a > b) then c else d
@@ -23,7 +23,7 @@ public class Ifgt4 extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return Ifgt4(params[0], params[1], params[2], params[3])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there are 4 params
 		double p1 = params[0];

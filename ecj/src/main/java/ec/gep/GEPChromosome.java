@@ -737,14 +737,14 @@ public class GEPChromosome implements Cloneable
      * @param valueIndex an index that specifies which value to use in each terminal in the expression.
      * @return the value of the expression for the individual.
      */
-    public double eval(boolean useTrainingData, int valueIndex)
+    public double eval(boolean useTrainingData, int valueIndex, GEPProblem... prob)
     {
     	// parse the gene expressions if necessary
     	if (parsedGeneExpressions == null)
     		parseGenes();
     	// evaluate the gene's expressions using the value at 'valueIndex' position in the terminal symbols
     	// and combine the gene results using the specified linking function
-    	double result = parsedGeneExpressions[0].eval(useTrainingData, valueIndex);
+    	double result = parsedGeneExpressions[0].eval(useTrainingData, valueIndex, prob);
     	if (Double.isNaN(result))
     		return result;
     	if (genome.length == 1)
@@ -758,8 +758,8 @@ public class GEPChromosome implements Cloneable
     	{
     		params[0] = result;
     		for (int j=1; j<functionArity; j++)
-    			params[j] = parsedGeneExpressions[i++].eval(useTrainingData, valueIndex);
-    		result = fs.eval(params);
+    			params[j] = parsedGeneExpressions[i++].eval(useTrainingData, valueIndex, prob);
+    		result = fs.eval(params, prob);
         	if (Double.isNaN(result))
         		return result;
     	}

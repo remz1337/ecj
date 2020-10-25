@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * The Ceiling value of a single parameter (promotes the double value to the closest higher integer value).
@@ -22,7 +22,7 @@ public class Ceiling extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return ceiling(params[0])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there is only 1 paramater
 		return (Math.ceil(params[0]));

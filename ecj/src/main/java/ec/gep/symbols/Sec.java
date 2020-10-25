@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * The secant of a single parameter (radians).
@@ -22,7 +22,7 @@ public class Sec extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return sec(params[0])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there is only 1 paramater
 		return (1.0/Math.cos(params[0]));

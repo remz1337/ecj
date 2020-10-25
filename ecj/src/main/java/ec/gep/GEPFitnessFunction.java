@@ -26,6 +26,7 @@ import java.util.*;
 import com.csvreader.*;
 
 import ec.EvolutionState;
+import ec.app.gep.Ant.Ant;
 import ec.util.Parameter;
 
 
@@ -3078,6 +3079,23 @@ v	 * @param ind the GEP individual that needs its fitness calculated.
 			// always 1000
 			return 1000.0;
 		}
+
+	public static double AntFitness(GEPIndividual ind, GEPProblem prob)
+	{
+		//double foodEaten=0;
+
+		Ant ant=(Ant)prob;
+
+		//ant.moves++;
+		//ant.phenotype+="T";
+		int lastMoves=-1;
+		while (ant.moves<ant.maxMoves && ant.sum<ant.food && lastMoves<ant.moves){
+			lastMoves=ant.moves;
+			double predictedValue = ind.eval(0, true,0, prob);
+		}
+
+		return ant.food - ant.sum;
+	}
 
 
 }

@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * The modulo (remainder) function applied to 2 parameters. Actually we
@@ -27,7 +27,7 @@ public class Mod extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return mod(params[0], params[1])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there are exactly 2 parameters
 		return (Math.IEEEremainder(params[0], params[1]));

@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * The maximum of 2 parameters.
@@ -22,7 +22,7 @@ public class Max2 extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return max(params[0], params[1])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there are 2 params
 		return (Math.max(params[0], params[1]));

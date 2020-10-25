@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * Gaussian function (exp(-pow(x+y+z, 2.0)).
@@ -22,7 +22,7 @@ public class Gau3 extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return (exp(-pow(params[0]+params[1]+params[2], 2.0))
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there are exactly 3 paramaters
 		return (Math.exp(-Math.pow(params[0]+params[1]+params[2], 2.0)));

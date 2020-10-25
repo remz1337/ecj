@@ -1,6 +1,6 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
 
 /**
  * The quartic of 1 parameter.
@@ -22,7 +22,7 @@ public class X4 extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return (params[0] * params[0] * params[0] * params[0])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob) 
 	{
 		//should check that there is exactly 1 paramater
 		double tmp = params[0] * params[0];

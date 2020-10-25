@@ -57,6 +57,8 @@ public class GEPIndividual extends Individual
     public static final String P_INDIVIDUAL = "individual";
     public static final int CHECK_BOUNDARY = 8;
     public static final String P_SIMPLIFY_EXPRESSIONS = "simplify-expressions";
+
+    public String phenotype;
     
     /**
      * Each GEP Individual can have 1 or more GEPchromosomes each of which
@@ -270,9 +272,10 @@ public class GEPIndividual extends Individual
 			s = s + "\n";
 			return s;*/
 
-		String s = "Genotype:" + "\n";
-		s = s + genotypeToStringForHumansVRE();
-		return s;
+		//String s = "Genotype:" + "\n";
+		//s = s + genotypeToStringForHumansVRE();
+		//return s;
+		return genotypeToStringForHumansVRE();
     }
 
 	public String genotypeToStringForHumansVRE()
@@ -287,8 +290,8 @@ public class GEPIndividual extends Individual
 			{
 				int j = i+1;
 				if (numChromosomes > 1)
-					s = s + "Chromosome " + j + ":\n";
-				s = s + chromosomes[i].genotypeToStringForHumansVRE() + "\n";
+					s = s + "\n" + "Chromosome " + j + ":\n";
+				s = s + chromosomes[i].genotypeToStringForHumansVRE();
 			}
 			return s;
 		} catch (RuntimeException e) {
@@ -449,9 +452,9 @@ public class GEPIndividual extends Individual
      * @param valueIndex an index that specifies which value to use in each terminal in the expression.
      * @return the value of the expression for the individual.
      */
-    public double eval(int chromosome, boolean useTrainingData, int valueIndex)
+    public double eval(int chromosome, boolean useTrainingData, int valueIndex, GEPProblem... prob)
     {
-    	return chromosomes[chromosome].eval(useTrainingData, valueIndex);
+    	return chromosomes[chromosome].eval(useTrainingData, valueIndex, prob);
     }
     
     /** Returns the "size" of the individual, namely, the number of nodes

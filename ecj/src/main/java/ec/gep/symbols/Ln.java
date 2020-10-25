@@ -1,6 +1,7 @@
 package ec.gep.symbols;
 
-import ec.gep.GEPFunctionSymbol;
+import ec.gep.GEPFunctionSymbol;import ec.gep.GEPProblem;
+import ec.gep.GEPProblem;
 
 /**
  * The value the inverse of a single parameter  (1/x).
@@ -22,7 +23,7 @@ public class Ln extends GEPFunctionSymbol {
 	 * @param params double array with the required parameter(s)
 	 * @return ln(params[0])
 	 */
-	public double eval(double params[]) 
+	public double eval(double params[], GEPProblem... prob)
 	{
 		//should check that there is only 1 paramater
 		return (Math.log(params[0]));
