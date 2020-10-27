@@ -54,38 +54,6 @@
     <exclude name="**/?*.aj"/>
   </patternset>
   
-  <!-- JDK definitions -->
-  
-  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
-  <path id="jdk.classpath.1.8">
-    <fileset dir="${jdk.home.1.8}">
-      <include name="jre/lib/charsets.jar"/>
-      <include name="jre/lib/ext/access-bridge-64.jar"/>
-      <include name="jre/lib/ext/cldrdata.jar"/>
-      <include name="jre/lib/ext/dnsns.jar"/>
-      <include name="jre/lib/ext/jaccess.jar"/>
-      <include name="jre/lib/ext/jfxrt.jar"/>
-      <include name="jre/lib/ext/localedata.jar"/>
-      <include name="jre/lib/ext/nashorn.jar"/>
-      <include name="jre/lib/ext/sunec.jar"/>
-      <include name="jre/lib/ext/sunjce_provider.jar"/>
-      <include name="jre/lib/ext/sunmscapi.jar"/>
-      <include name="jre/lib/ext/sunpkcs11.jar"/>
-      <include name="jre/lib/ext/zipfs.jar"/>
-      <include name="jre/lib/jce.jar"/>
-      <include name="jre/lib/jfr.jar"/>
-      <include name="jre/lib/jfxswt.jar"/>
-      <include name="jre/lib/jsse.jar"/>
-      <include name="jre/lib/management-agent.jar"/>
-      <include name="jre/lib/resources.jar"/>
-      <include name="jre/lib/rt.jar"/>
-    </fileset>
-  </path>
-  
-  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
-  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
-  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
-  
   
   <!-- Project Libraries -->
   
@@ -110,9 +78,6 @@
   <dirname property="module.ecj_gep.basedir" file="${ant.file}"/>
   
   
-  <property name="module.jdk.home.ecj_gep" value="${project.jdk.home}"/>
-  <property name="module.jdk.bin.ecj_gep" value="${project.jdk.bin}"/>
-  <property name="module.jdk.classpath.ecj_gep" value="${project.jdk.classpath}"/>
   
   <property name="compiler.args.ecj_gep" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
   
@@ -124,7 +89,6 @@
   </path>
   
   <path id="ecj_gep.module.production.classpath">
-    <path refid="${module.jdk.classpath.ecj_gep}"/>
     <path refid="library.org.jfree:jfreechart:1.5.0.classpath"/>
     <path refid="library.com.lowagie:itext:2.1.7.classpath"/>
     <pathelement location="${basedir}/ecj/start/javacsv.jar"/>
@@ -140,7 +104,6 @@
   </path>
   
   <path id="ecj_gep.module.classpath">
-    <path refid="${module.jdk.classpath.ecj_gep}"/>
     <pathelement location="${ecj_gep.output.dir}"/>
     <path refid="library.org.jfree:jfreechart:1.5.0.classpath"/>
     <path refid="library.com.lowagie:itext:2.1.7.classpath"/>
@@ -178,7 +141,7 @@
   
   <target name="compile.module.ecj_gep.production" description="Compile module ecj_GEP; production classes">
     <mkdir dir="${ecj_gep.output.dir}"/>
-    <javac destdir="${ecj_gep.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.ecj_gep}/javac">
+    <javac destdir="${ecj_gep.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true">
       <compilerarg line="${compiler.args.ecj_gep}"/>
       <bootclasspath refid="ecj_gep.module.bootclasspath"/>
       <classpath refid="ecj_gep.module.production.classpath"/>
