@@ -14,7 +14,7 @@ eval.problem.file = santafe.trl
 
 
 # run for 50 generations, quit prematurely if I find something ideal
-generations =				    100000
+generations =				    10000000
 quit-on-run-complete =			true
 
 
@@ -22,14 +22,14 @@ quit-on-run-complete =			true
 # ==============================
 
 # subpop size is 30 individuals
-pop.subpop.0.size =			100
+pop.subpop.0.size =			6
 
 
 # ec.Species
 # ==============================
 
-gep.species.inversion-prob         = 0.1
-gep.species.mutation-prob          = 0.044
+gep.species.inversion-prob         = 0.0
+gep.species.mutation-prob          = 0.1
 gep.species.istransposition-prob   = 0.0
 gep.species.ristransposition-prob  = 0.0
 gep.species.onepointrecomb-prob    = 0.0
@@ -37,8 +37,8 @@ gep.species.twopointrecomb-prob    = 0.0
 gep.species.generecomb-prob        = 0.0
 gep.species.genetransposition-prob = 0.0
 
-gep.species.numgenes = 2
-gep.species.gene-headsize = 20
+gep.species.numgenes = 1
+gep.species.gene-headsize = 15
 gep.species.gene-linking-function = Ant_IfFoodAhead
 
 # Problem type must be one of: functionfinding, classification, timeseries, logical, control
@@ -51,9 +51,10 @@ gep.species.symbolset.terminalsize = 3
 gep.species.symbolset.terminal.0 = L
 gep.species.symbolset.terminal.1 = R
 gep.species.symbolset.terminal.2 = M
-gep.species.symbolset.functionsize = 1
+gep.species.symbolset.functionsize = 2
 gep.species.symbolset.function.0 = Ant_IfFoodAhead
-gep.species.symbolset.function.0.weight = 1
+gep.species.symbolset.function.1 = Ant_ProgN2
+#gep.species.symbolset.function.0.weight = 1
 #gep.species.symbolset.function.1 = Ant_TurnLeft
 #gep.species.symbolset.function.1.weight = 1
 #gep.species.symbolset.function.2 = Or
@@ -80,5 +81,5 @@ stat.VRE-CSV = gepvre.csv
 
 prefix = Antcp
 
-
-
+seed.0 = 4357
+#seed.0 = time
