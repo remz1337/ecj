@@ -18,7 +18,7 @@
  *
  */
 
-package ec.app.gep.Multiplexer6Bit;
+package ec.app.gep.Multiplexer6BitGEP;
 
 import ec.*;
 import ec.gep.*;

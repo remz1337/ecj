@@ -8,7 +8,7 @@ parent.0 =				../../../gep/gep.params
 
 # Problem
 #===============================
-eval.problem = ec.app.gep.Multiplexer6Bit.Multiplexer6Bit
+eval.problem = ec.app.gep.Multiplexer6BitGEP.Multiplexer6Bit
 
 
 # run for 50 generations, quit prematurely if I find something ideal
