@@ -104,7 +104,106 @@
   
   <!-- Modules -->
   
-  <import file="${basedir}/.idea/module_ecj_gep.xml"/>
+  
+  <!-- Module ecj_GEP -->
+  
+  <dirname property="module.ecj_gep.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.ecj_gep" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.ecj_gep" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.ecj_gep" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.ecj_gep" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="ecj_gep.output.dir" value="${module.ecj_gep.basedir}/ecj/target/production/ecj_GEP"/>
+  <property name="ecj_gep.testoutput.dir" value="${module.ecj_gep.basedir}/ecj/target/test/ecj_GEP"/>
+  
+  <path id="ecj_gep.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="ecj_gep.module.production.classpath">
+    <path refid="${module.jdk.classpath.ecj_gep}"/>
+    <path refid="library.org.jfree:jfreechart:1.5.0.classpath"/>
+    <path refid="library.com.lowagie:itext:2.1.7.classpath"/>
+    <pathelement location="${basedir}/ecj/start/javacsv.jar"/>
+    <pathelement location="${basedir}/ecj/start/meditor.jar"/>
+  </path>
+  
+  <path id="ecj_gep.runtime.production.module.classpath">
+    <pathelement location="${ecj_gep.output.dir}"/>
+    <path refid="library.org.jfree:jfreechart:1.5.0.classpath"/>
+    <path refid="library.com.lowagie:itext:2.1.7.classpath"/>
+    <pathelement location="${basedir}/ecj/start/javacsv.jar"/>
+    <pathelement location="${basedir}/ecj/start/meditor.jar"/>
+  </path>
+  
+  <path id="ecj_gep.module.classpath">
+    <path refid="${module.jdk.classpath.ecj_gep}"/>
+    <pathelement location="${ecj_gep.output.dir}"/>
+    <path refid="library.org.jfree:jfreechart:1.5.0.classpath"/>
+    <path refid="library.com.lowagie:itext:2.1.7.classpath"/>
+    <pathelement location="${basedir}/ecj/start/javacsv.jar"/>
+    <pathelement location="${basedir}/ecj/start/meditor.jar"/>
+  </path>
+  
+  <path id="ecj_gep.runtime.module.classpath">
+    <pathelement location="${ecj_gep.testoutput.dir}"/>
+    <pathelement location="${ecj_gep.output.dir}"/>
+    <path refid="library.org.jfree:jfreechart:1.5.0.classpath"/>
+    <path refid="library.com.lowagie:itext:2.1.7.classpath"/>
+    <pathelement location="${basedir}/ecj/start/javacsv.jar"/>
+    <pathelement location="${basedir}/ecj/start/meditor.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.ecj_gep">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.ecj_gep">
+    <patternset refid="excluded.from.module.ecj_gep"/>
+  </patternset>
+  
+  <path id="ecj_gep.module.sourcepath">
+    <dirset dir="${module.ecj_gep.basedir}">
+      <include name="ecj/src/main/java"/>
+      <include name="ecj/src/main/resources"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.ecj_gep" depends="compile.module.ecj_gep.production,compile.module.ecj_gep.tests" description="Compile module ecj_GEP"/>
+  
+  <target name="compile.module.ecj_gep.production" description="Compile module ecj_GEP; production classes">
+    <mkdir dir="${ecj_gep.output.dir}"/>
+    <javac destdir="${ecj_gep.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.ecj_gep}/javac">
+      <compilerarg line="${compiler.args.ecj_gep}"/>
+      <bootclasspath refid="ecj_gep.module.bootclasspath"/>
+      <classpath refid="ecj_gep.module.production.classpath"/>
+      <src refid="ecj_gep.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.ecj_gep"/>
+    </javac>
+    
+    <copy todir="${ecj_gep.output.dir}">
+      <fileset dir="${module.ecj_gep.basedir}/ecj/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.ecj_gep.basedir}/ecj/src/main/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.ecj_gep.tests" depends="compile.module.ecj_gep.production" description="compile module ecj_GEP; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.ecj_gep" description="cleanup module">
+    <delete dir="${ecj_gep.output.dir}"/>
+    <delete dir="${ecj_gep.testoutput.dir}"/>
+  </target>
   
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
