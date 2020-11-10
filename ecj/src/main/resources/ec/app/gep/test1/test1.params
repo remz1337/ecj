@@ -40,7 +40,7 @@ gep.species.problemtype = functionfinding
 #
 # the terminal symbols (variable names) will be obtained from the data file (1st row)
 #gep.species.symbolset.terminalfilename = ec/app/gep/test1/test1.txt
-gep.species.symbolset.terminalfilename = C:/Users/remib/source/repos/remz1337/ecj_GEP/ecj/src/main/resources/ec/app/gep/test1/test1.txt
+gep.species.symbolset.terminalfilename = C:/Users/rbedardcouture/source/repos/ecj_GEP/ecj/src/main/resources/ec/app/gep/test1/test1.txt
 
 # 4 functions + - * /  are used in this problem
 gep.species.symbolset.functionsize = 4

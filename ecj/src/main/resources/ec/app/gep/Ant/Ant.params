@@ -29,7 +29,8 @@ pop.subpop.0.size =			6
 # ==============================
 
 gep.species.inversion-prob         = 0.0
-gep.species.mutation-prob          = 0.1
+gep.species.baseline-mutation-prob          = 0.1
+gep.species.mutation-prob          = 0.0
 gep.species.istransposition-prob   = 0.0
 gep.species.ristransposition-prob  = 0.0
 gep.species.onepointrecomb-prob    = 0.0
@@ -46,7 +47,7 @@ gep.species.gene-linking-function = Ant_IfFoodAhead
 gep.species.problemtype = control
 
 #gep.species.symbolset.terminalfilename = ec/app/gep/Majority/Majority.txt
-#gep.species.symbolset.terminalfilename = C:/Users/remib/source/repos/remz1337/ecj_GEP/ecj/src/main/resources/ec/app/gep/Ant/santafe.trl
+#gep.species.symbolset.terminalfilename = C:/Users/rbedardcouture/source/repos/ecj_GEP/ecj/src/main/resources/ec/app/gep/Ant/santafe.trl
 gep.species.symbolset.terminalsize = 3
 gep.species.symbolset.terminal.0 = L
 gep.species.symbolset.terminal.1 = R
