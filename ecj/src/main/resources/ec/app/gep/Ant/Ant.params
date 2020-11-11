@@ -22,14 +22,13 @@ quit-on-run-complete =			true
 # ==============================
 
 # subpop size is 30 individuals
-pop.subpop.0.size =			6
+pop.subpop.0.size =			3
 
 
 # ec.Species
 # ==============================
 
 gep.species.inversion-prob         = 0.0
-gep.species.baseline-mutation-prob          = 0.1
 gep.species.mutation-prob          = 0.0
 gep.species.istransposition-prob   = 0.0
 gep.species.ristransposition-prob  = 0.0
@@ -37,6 +36,13 @@ gep.species.onepointrecomb-prob    = 0.0
 gep.species.twopointrecomb-prob    = 0.0
 gep.species.generecomb-prob        = 0.0
 gep.species.genetransposition-prob = 0.0
+gep.species.baseline-mutation-prob = 0.0
+
+gep.species.use-constants             = false
+gep.species.rnc-mutation-prob         = 0.0
+gep.species.dc-mutation-prob          = 0.0
+gep.species.dc-inversion-prob         = 0.0
+gep.species.dc-istransposition-prob   = 0.0
 
 gep.species.numgenes = 1
 gep.species.gene-headsize = 15
@@ -84,3 +90,9 @@ prefix = Antcp
 
 seed.0 = 4357
 #seed.0 = time
+
+pop.subpop.0.zero-fitness-retries = 0
+
+#Selection
+#gep.baselinemutation.source.0 = ec.select.FitProportionateSelection
+gep.baselinemutation.source.0 = ec.select.SteadySelection

@@ -90,16 +90,17 @@ public class BaselineMutationPipeline extends GEPBreedingPipeline
         MersenneTwisterFast srt = state.random[thread];
         GEPSpecies s = (GEPSpecies) inds[start].species;
 
-        // Implement standard 1 point mutation
-        for (int g=0;g<n;g++){
-            try {
-                GEPIndividual ind = (GEPIndividual)inds[g]; // the genome (chromosome) to mutate
-                int numChromosomes = ind.chromosomes.length;
-                // do this for each chromosome in the individual
-                int chrom_it= srt.nextInt(numChromosomes);
+        if(s.baselineMutationProbability>0){
+            // Implement standard 1 point mutation
+            for (int g=0;g<n;g++){
+                try {
+                    GEPIndividual ind = (GEPIndividual)inds[g]; // the genome (chromosome) to mutate
+                    int numChromosomes = ind.chromosomes.length;
+                    // do this for each chromosome in the individual
+                    int chrom_it= srt.nextInt(numChromosomes);
 
-                //for (int i=0; i<numChromosomes; i++)
-                //{
+                    //for (int i=0; i<numChromosomes; i++)
+                    //{
                     GEPChromosome chromosome = ind.chromosomes[chrom_it];
                     int genome[][] = chromosome.genome;
                     // choose a gene in the genome
@@ -109,10 +110,11 @@ public class BaselineMutationPipeline extends GEPBreedingPipeline
                     // now set the new point to a random terminal or function
                     gene[genePos] = s.symbolSet.chooseFunctionOrTerminalSymbol(state, thread, genePos, s);
                     chromosome.parsedGeneExpressions = null;
-               //}
-                ind.evaluated = false;
-                ind.chromosomesParsed = false;
-            } catch (Exception e) { e.printStackTrace(); }
+                    //}
+                    ind.evaluated = false;
+                    ind.chromosomesParsed = false;
+                } catch (Exception e) { e.printStackTrace(); }
+            }
         }
 
         return n;
