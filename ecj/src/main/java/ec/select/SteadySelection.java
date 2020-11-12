@@ -10,81 +10,87 @@ package ec.select;
 import ec.EvolutionState;
 import ec.Individual;
 import ec.SelectionMethod;
-import ec.steadystate.SteadyStateBSourceForm;
-import ec.steadystate.SteadyStateEvolutionState;
 import ec.util.Parameter;
+import ec.util.RandomChoice;
 
 /* 
- * FirstSelection.java
+ * FitProportionateSelection.java
  * 
- * Created: Mon Aug 30 19:27:15 1999
+ * Created: Thu Feb 10 16:31:24 2000
  * By: Sean Luke
  */
 
 /**
- * Always picks the first individual in the subpopulation.  This is mostly
- * for testing purposes.
+ * Picks individuals in a population in direct proportion to their
+ * fitnesses as returned by their fitness() methods.  This is expensive to
+ * set up and bring down, so it's not appropriate for steady-state evolution.
+ * If you're not familiar with the relative advantages of 
+ * selection methods and just want a good one,
+ * use TournamentSelection instead.   Not appropriate for
+ * multiobjective fitnesses.
  *
+ * <p><b><font color=red>
+ * Note: Fitnesses must be non-negative.  0 is assumed to be the worst fitness.
+ * </font></b>
+
+ <p><b>Typical Number of Individuals Produced Per <tt>produce(...)</tt> call</b><br>
+ Always 1.
 
  <p><b>Default Base</b><br>
- select.first
+ select.fitness-proportionate
 
  *
  * @author Sean Luke
  * @version 1.0 
  */
 
-public class SteadySelection extends SelectionMethod implements SteadyStateBSourceForm
+public class SteadySelection extends SelectionMethod
     {
-    /** default base */
-    public static final String P_STEADYSELECTION = "steadyselection";
+    /** Default base */
+    public static final String P_STEADYSELECTION = "fitness-proportionate";
+    /** Normalized, totalized fitnesses for the population */
+    //public float[] fitnesses;
+    int pos;
 
-    public Parameter defaultBase()
+        @Override
+        public void setup(EvolutionState state, Parameter base) {
+            super.setup(state, base);
+            pos=0;
+        }
+
+        public Parameter defaultBase()
         {
         return SelectDefaults.base().push(P_STEADYSELECTION);
         }
-    
-    // I hard-code both produce(...) methods for efficiency's sake
+
+    // don't need clone etc. 
+
+    public void prepareToProduce(final EvolutionState s,
+        final int subpopulation,
+        final int thread)
+        {
+
+        }
 
     public int produce(final int subpopulation,
         final EvolutionState state,
         final int thread)
         {
-        //return 0;
-            TODO();
-        }
-
-
-    // I hard-code both produce(...) methods for efficiency's sake
-
-    public int produce(final int min, 
-        final int max, 
-        final int start,
-        final int subpopulation,
-        final Individual[] inds,
-        final EvolutionState state,
-        final int thread) 
-        {
-        int n = 1;
-        if (n>max) n = max;
-        if (n<min) n = min;
-
-        for(int q = 0; q < n; q++)
-            {
-            // pick size random individuals, then pick the best.
-            Individual[] oldinds = state.population.subpops[subpopulation].individuals;
-            inds[start+q] = oldinds[0];  // note it's a pointer transfer, not a copy!
+            if(pos>=state.population.subpops[subpopulation].individuals.length){
+                state.output.fatal("no more individual in subpopulation(offending subpopulation #" + subpopulation + ")");
             }
-        return n;
+        // Pick and return an individual from the population
+            int curpos=pos;
+            pos++;
+        return curpos;
         }
-
-    public void individualReplaced(final SteadyStateEvolutionState state,
+    
+    public void finishProducing(final EvolutionState s,
         final int subpopulation,
-        final int thread,
-        final int individual)
-        { return; }
-    
-    public void sourcesAreProperForm(final SteadyStateEvolutionState state)
-        { return; }
-    
+        final int thread)
+        {
+        // release the distributions so we can quickly 
+        // garbage-collect them if necessary
+        //pos++;
+        }
     }
