@@ -22,7 +22,7 @@ quit-on-run-complete =			true
 # ==============================
 
 # subpop size is 30 individuals
-pop.subpop.0.size =			3
+pop.subpop.0.size =			2
 
 
 # ec.Species
@@ -36,7 +36,7 @@ gep.species.onepointrecomb-prob    = 0.0
 gep.species.twopointrecomb-prob    = 0.0
 gep.species.generecomb-prob        = 0.0
 gep.species.genetransposition-prob = 0.0
-gep.species.baseline-mutation-prob = 0.0
+gep.species.baseline-mutation-prob = 0.1
 
 gep.species.use-constants             = false
 gep.species.rnc-mutation-prob         = 0.0
@@ -96,3 +96,4 @@ pop.subpop.0.zero-fitness-retries = 0
 #Selection
 #gep.baselinemutation.source.0 = ec.select.FitProportionateSelection
 gep.baselinemutation.source.0 = ec.select.SteadySelection
+gep.baselinemutation.keepbest = true

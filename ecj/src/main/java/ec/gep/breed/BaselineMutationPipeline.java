@@ -23,7 +23,9 @@ package ec.gep.breed;
 import ec.BreedingPipeline;
 import ec.EvolutionState;
 import ec.Individual;
+import ec.Problem;
 import ec.gep.*;
+import ec.simple.SimpleProblemForm;
 import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
 
@@ -47,6 +49,9 @@ public class BaselineMutationPipeline extends GEPBreedingPipeline
 {
     public static final int NUM_SOURCES = 1;
     public static final String P_BASLINEMUTATION_PIPE = "baselinemutation";
+    //public static final String P_KEEPBEST = "keepbest";
+
+    private Boolean keepBest=false;
 
     public Parameter defaultBase() { return GEPDefaults.base().push(P_BASLINEMUTATION_PIPE);/* */ }
 
@@ -63,7 +68,12 @@ public class BaselineMutationPipeline extends GEPBreedingPipeline
     public void setup(final EvolutionState state, final Parameter base)
     {
         super.setup(state,base);
+        //Parameter p= new Parameter("gep.baselinemutation.keepbest");
+        Parameter p= new Parameter("gep.baselinemutation.keepbest");
 
+        //String temp=state.parameters.getStringWithDefault(p,null,"hello");
+        //String temp2=state.parameters.getStringWithDefault(base.push(P_KEEPBEST),null,"hello");
+        keepBest = state.parameters.getBoolean(p,null,false);
     }
 
 
@@ -94,6 +104,7 @@ public class BaselineMutationPipeline extends GEPBreedingPipeline
             // Implement standard 1 point mutation
             for (int g=0;g<n;g++){
                 try {
+                    GEPIndividual oldind = (GEPIndividual)inds[g].clone();
                     GEPIndividual ind = (GEPIndividual)inds[g]; // the genome (chromosome) to mutate
                     int numChromosomes = ind.chromosomes.length;
                     // do this for each chromosome in the individual
@@ -113,6 +124,23 @@ public class BaselineMutationPipeline extends GEPBreedingPipeline
                     //}
                     ind.evaluated = false;
                     ind.chromosomesParsed = false;
+
+                    if(keepBest){
+                        // EVALUATION
+                        SimpleProblemForm p = (SimpleProblemForm)(state.evaluator.p_problem.clone());
+                        p.evaluate(state,ind,subpopulation,thread);
+
+                        //Need to check other Fitness class implementation
+                        if(oldind.fitness.betterThan(ind.fitness)){
+                            //state.output.message("Old ind is better");
+                            //ind=oldind;
+                            inds[g]=oldind;
+                        }/*else{
+                            state.output.message("New ind is better");
+                        }*/
+                    }
+                    //state.output.message("Test");
+
                 } catch (Exception e) { e.printStackTrace(); }
             }
         }

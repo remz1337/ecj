@@ -47,7 +47,7 @@ import ec.util.RandomChoice;
 public class SteadySelection extends SelectionMethod
     {
     /** Default base */
-    public static final String P_STEADYSELECTION = "fitness-proportionate";
+    public static final String P_STEADYSELECTION = "steadystate";
     /** Normalized, totalized fitnesses for the population */
     //public float[] fitnesses;
     int pos;
