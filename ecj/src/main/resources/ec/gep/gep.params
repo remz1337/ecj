@@ -144,7 +144,7 @@ seed.0 = 				4357
 # generation, and the prefix to all the files would be "ec.*" as specified here
 checkpoint =				      false
 # checkpoint-modulo =     1
-# prefix = 				        ec
+prefix = 				        ec
 
 # simple generational evolution -- don't change this
 state = 				ec.simple.SimpleEvolutionState
@@ -418,12 +418,13 @@ gep.genetransposition.source.0 = ec.gep.breed.RIStranspositionPipeline
 gep.RIStransposition.source.0 = ec.gep.breed.IStranspositionPipeline
 gep.IStransposition.source.0 = ec.gep.breed.InversionPipeline
 gep.inversion.source.0 = ec.gep.breed.MutationPipeline
+gep.mutation.source.0 = ec.gep.breed.BaselineMutationPipeline
 # FitProportionateSelection (roulette selection) is used exclusively by Ferreira - could be changed
-gep.mutation.source.0 = ec.select.FitProportionateSelection
+gep.baselinemutation.source.0 = ec.select.FitProportionateSelection
 
 # 1 is the default and only value used by Ferreira (could be changed to operate differently than Ferreira
 # or to make sure we have the k best individuals in the final generation)
-breed.elite.0 = 			1
+breed.elite.0 = 0			1
 
 # ec.SimpleStatistics
 # ==============================

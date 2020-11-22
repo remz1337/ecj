@@ -1530,7 +1530,7 @@ public final class GEPFitnessFunction
         	expectedResult = dvValues[i];
         	if (predictedValue == expectedResult)
         	    sumOfHits += 1.0;
-        }        
+        }
         // the raw fitness ... NH
         return sumOfHits;
 	}
@@ -3089,12 +3089,13 @@ v	 * @param ind the GEP individual that needs its fitness calculated.
 		//ant.moves++;
 		//ant.phenotype+="T";
 		int lastMoves=-1;
-		while (ant.moves<ant.maxMoves && ant.sum<ant.food && lastMoves<ant.moves){
+		while (ant.moves<ant.maxMoves && ant.sum<ant.food && lastMoves<ant.moves && lastMoves!=ant.moves){
 			lastMoves=ant.moves;
 			double predictedValue = ind.eval(0, true,0, prob);
 		}
 
-		return ant.food - ant.sum;
+		//return ant.food - ant.sum;
+		return ant.sum;//for SimpleFitness
 	}
 
 

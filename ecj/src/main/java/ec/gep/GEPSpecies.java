@@ -57,6 +57,7 @@ public class GEPSpecies extends Species
     public final static String P_TIMESERIES_TESTINGPREDICTIONS = "timeseries-testingpredictions";
     
     public final static String P_INVERSIONPROB = "inversion-prob";
+    public final static String P_BASLINEMUTATIONPROB = "baseline-mutation-prob";
     public final static String P_MUTATIONPROB = "mutation-prob";
     public final static String P_ISTRANSPOSITIONPROB = "istransposition-prob";
     public final static String P_RISTRANSPOSITIONPROB = "ristransposition-prob";
@@ -98,6 +99,8 @@ public class GEPSpecies extends Species
     public final static int LF_NOR = 8;
     public final static int LF_NXOR = 9;
 
+    /** Probability that a gene will mutate */
+    public double baselineMutationProbability;
     /** Probability that a gene will mutate */
     public double mutationProbability;
     /** Probability of inversion in a gene */
@@ -216,6 +219,14 @@ public class GEPSpecies extends Species
         {   state.output.warning("GEPSpecies must have a mutation probability between 0.0 and 1.0 inclusive, defaulting to 0.0",
                                base.push(P_MUTATIONPROB),def.push(P_MUTATIONPROB));
             mutationProbability = 0.0;
+        }
+
+        baselineMutationProbability = state.parameters.getDouble(
+                base.push(P_BASLINEMUTATIONPROB),def.push(P_BASLINEMUTATIONPROB),0.0,1.0);
+        if (baselineMutationProbability==-1.0)
+        {   state.output.warning("GEPSpecies must have a mutation probability between 0.0 and 1.0 inclusive, defaulting to 0.0",
+                base.push(P_BASLINEMUTATIONPROB),def.push(P_BASLINEMUTATIONPROB));
+            baselineMutationProbability = 0.0;
         }
     
         inversionProbability = state.parameters.getDouble(

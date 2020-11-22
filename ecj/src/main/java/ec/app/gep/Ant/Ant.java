@@ -92,7 +92,7 @@ public class Ant extends GEPProblem implements SimpleProblemForm
 
     public String phenotype;
 
-    public static final double IDEAL_FITNESS_MINIMUM = 0;
+    //public static final double IDEAL_FITNESS_MINIMUM = 0;
 
    /* public Object clone()
     {
@@ -237,11 +237,11 @@ public class Ant extends GEPProblem implements SimpleProblemForm
 
             // the fitness better be SimpleFitness!
             SimpleFitness f = ((SimpleFitness)ind.fitness);
-            f.setFitness(state,(float)fitness, fitness <= IDEAL_FITNESS_MINIMUM);
+            f.setFitness(state,(float)fitness, fitness >= food);
             ind.evaluated = true;
             ((GEPIndividual) ind).phenotype=phenotype;
 
-            if (fitness >= IDEAL_FITNESS_MINIMUM)
+            if (fitness >= food)
             {
                 ((GEPIndividual)ind).printIndividualForHumans(state, 1, 1);
             }
