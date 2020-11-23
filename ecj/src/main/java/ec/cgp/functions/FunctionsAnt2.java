@@ -208,17 +208,19 @@ public class FunctionsAnt2 implements Functions {
 	/** Parse and execute actions */
 	public static void ExecuteAction(String action, final Problem prob)
 	{
-		//ProblemAnt2 p = (ProblemAnt2)prob;
-		switch (action) {
-			case "L":
-				TurnLeft(prob);
-				break;
-			case "R":
-				TurnRight(prob);
-				break;
-			case "M":
-				MoveForward(prob);
-				break;
+		ProblemAnt2 p = (ProblemAnt2)prob;
+		if(p.moves < p.maxMoves){
+			switch (action) {
+				case "L":
+					TurnLeft(prob);
+					break;
+				case "R":
+					TurnRight(prob);
+					break;
+				case "M":
+					MoveForward(prob);
+					break;
+			}
 		}
 	}
 
