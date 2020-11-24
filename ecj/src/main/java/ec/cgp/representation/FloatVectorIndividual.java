@@ -52,6 +52,11 @@ public class FloatVectorIndividual extends VectorIndividualCGP {
 
 	}
 
+	public void baselineMutate(EvolutionState state, int thread) {
+		defaultMutate(state, thread);
+		//TODO();
+	}
+
 	/** Any-point crossover; kept here for posterity. */
 	public void defaultCrossover2(EvolutionState state, int thread,
 			VectorIndividual ind) {

@@ -47,12 +47,20 @@ public class IntegerVectorIndividual extends VectorIndividualCGP {
 	 */
 	public void defaultMutate(EvolutionState state, int thread) {
 		IntegerVectorSpecies s = (IntegerVectorSpecies) species;
-                for (int x = 0; x < genome.length; x++)
-                        if (state.random[thread].nextBoolean(s.mutationProbability(x))) {
-                                genome[x] = randomValueFromClosedInterval(0, s
-                                                .computeMaxGene(x, genome), state.random[thread]);
-                        }
+		for (int x = 0; x < genome.length; x++)
+			if (state.random[thread].nextBoolean(s.mutationProbability(x))) {
+				genome[x] = randomValueFromClosedInterval(0, s
+						.computeMaxGene(x, genome), state.random[thread]);
+			}
+	}
 
+	public void baselineMutate(EvolutionState state, int thread) {
+		IntegerVectorSpecies s = (IntegerVectorSpecies) species;
+
+		MersenneTwisterFast srt = state.random[thread];
+		int genePos = srt.nextInt(genome.length);
+
+		genome[genePos] = randomValueFromClosedInterval(0, s.computeMaxGene(genePos, genome), state.random[thread]);
 	}
 
 	/** Initialize individual. */
