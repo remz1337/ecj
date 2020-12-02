@@ -1,5 +1,6 @@
 package ec.cgp.representation;
 
+import ec.EvolutionState;
 import ec.vector.VectorIndividual;
 
 
@@ -16,5 +17,7 @@ public abstract class VectorIndividualCGP extends VectorIndividual {
 
 	/** Return the genome. */
 	public abstract Object getGenome();
+
+	public abstract void baselineMutate(EvolutionState state, int thread);
 
 }

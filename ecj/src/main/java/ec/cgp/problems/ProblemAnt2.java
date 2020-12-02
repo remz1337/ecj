@@ -191,6 +191,7 @@ public class ProblemAnt2 extends ProblemCGP {
 			sum = 0;
 			posx = 0;
 			posy = 0;
+			moves = 0;
 			orientation = O_RIGHT;
 			phenotype = "";
 
