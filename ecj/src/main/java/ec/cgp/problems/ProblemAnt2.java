@@ -183,17 +183,31 @@ public class ProblemAnt2 extends ProblemCGP {
 	}
 
 
+	private void reset(){
+		// clean up array
+		for (int y = 0; y < food; y++)
+			map[foodx[y]][foody[y]] = FOOD;
+
+		sum = 0;
+		posx = 0;
+		posy = 0;
+		moves = 0;
+		orientation = O_RIGHT;
+//		phenotype = "";
+		updatePhenotype();
+	}
 
 	/** Evaluate the CGP and compute fitness. */
 	public void evaluate(EvolutionState state, Individual ind,
 						 int subpopulation, int threadnum) {
 		if (!ind.evaluated) {
-			sum = 0;
-			posx = 0;
-			posy = 0;
-			moves = 0;
-			orientation = O_RIGHT;
-			phenotype = "";
+//			sum = 0;
+//			posx = 0;
+//			posy = 0;
+//			moves = 0;
+//			orientation = O_RIGHT;
+//			phenotype = "";
+			reset();
 
 			VectorSpeciesCGP s = (VectorSpeciesCGP) ind.species;
 			VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
@@ -237,12 +251,13 @@ public class ProblemAnt2 extends ProblemCGP {
 	{
 		state.output.println("\n\nBest Individual's Map\n=====================", log);
 
-		sum = 0;
-		pmod = 97; /** ascii a */
-		posx = 0;
-		posy = 0;
-		orientation = O_RIGHT;
-		phenotype = "";
+//		sum = 0;
+//		pmod = 97; /** ascii a */
+//		posx = 0;
+//		posy = 0;
+//		orientation = O_RIGHT;
+//		phenotype = "";
+		reset();
 
 		VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
 
@@ -288,5 +303,16 @@ public class ProblemAnt2 extends ProblemCGP {
 			}
 			state.output.println("",log);
 		}
+	}
+
+	public void updatePhenotype(){
+		phenotype = "";
+		for(int x=0;x<map.length;x++)
+			for(int y=0;y<map[0].length;y++)
+				if (map[x][y]==FOOD){
+					phenotype+="0";
+				}else if(map[x][y]==ATE){
+					phenotype+="1";
+				}
 	}
 }

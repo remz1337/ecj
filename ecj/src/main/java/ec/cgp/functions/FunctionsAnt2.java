@@ -228,7 +228,7 @@ public class FunctionsAnt2 implements Functions {
 	public static void TurnLeft(final Problem prob)
 	{
 		ProblemAnt2 p = (ProblemAnt2)prob;
-		p.phenotype+="l";
+		//p.phenotype+="l";
 		switch (p.orientation)
 		{
 			case ProblemAnt2.O_UP:
@@ -253,7 +253,7 @@ public class FunctionsAnt2 implements Functions {
 	public static void TurnRight(final Problem prob)
 	{
 		ProblemAnt2 p = (ProblemAnt2)prob;
-		p.phenotype+="r";
+		//p.phenotype+="r";
 		switch (p.orientation)
 		{
 			case ProblemAnt2.O_UP:
@@ -278,7 +278,7 @@ public class FunctionsAnt2 implements Functions {
 	public static void MoveForward(final Problem prob)
 	{
 		ProblemAnt2 p = (ProblemAnt2)prob;
-		p.phenotype+="m";
+		//p.phenotype+="m";
 		switch (p.orientation)
 		{
 			case ProblemAnt2.O_UP:
@@ -306,6 +306,7 @@ public class FunctionsAnt2 implements Functions {
 		{
 			p.sum++;
 			p.map[p.posx][p.posy]= ProblemAnt2.ATE;
+			p.updatePhenotype();
 		}
 	}
 
