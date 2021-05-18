@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>edu.gmu.cs</groupId>
-    <artifactId>ecj</artifactId>
+    <artifactId>ecj_gep</artifactId>
     <version>27</version>
     <packaging>jar</packaging>
 
@@ -90,6 +90,20 @@
 	  <artifactId>pshecj</artifactId>
 	  <version>1</version>
 	</dependency>
+	<dependency>
+		<groupId>com.csvreader</groupId>
+		<artifactId>csvreader</artifactId>
+		<version>1</version>
+		<scope>system</scope>
+		<systemPath>${project.basedir}/local-repo/start/javacsv.jar</systemPath>
+	</dependency>
+	<dependency>
+		<groupId>jscl</groupId>
+		<artifactId>all</artifactId>
+		<version>1</version>
+		<scope>system</scope>
+		<systemPath>${project.basedir}/local-repo/start/meditor.jar</systemPath>
+	</dependency>
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -145,7 +159,7 @@
 	</plugin>
 	
 	<!--Measure code coverage of tests with JaCoCo. -->
-	<plugin>
+	<!--<plugin>
 	  <groupId>org.jacoco</groupId>
 	  <artifactId>jacoco-maven-plugin</artifactId>
 	  <version>0.8.5</version>
@@ -170,15 +184,15 @@
 	      </goals>
 	      <configuration>
 		<rules>
-		  <!--  implementation is needed only for Maven 2  -->
+		  &lt;!&ndash;  implementation is needed only for Maven 2  &ndash;&gt;
 		  <rule>
 		    <element>BUNDLE</element>
 		    <limits>
-		      <!--  implementation is needed only for Maven 2  -->
+		      &lt;!&ndash;  implementation is needed only for Maven 2  &ndash;&gt;
 		      <limit>
 			<counter>COMPLEXITY</counter>
 			<value>COVEREDRATIO</value>
-			<!--<minimum>0.60</minimum>-->
+			&lt;!&ndash;<minimum>0.60</minimum>&ndash;&gt;
 		      </limit>
 		    </limits>
 		  </rule>
@@ -186,8 +200,8 @@
 	      </configuration>
 	    </execution>
 	  </executions>
-	</plugin>
-		  <plugin>
+	</plugin>-->
+<!--		  <plugin>
 		    <groupId>org.apache.maven.plugins</groupId>
 		    <artifactId>maven-javadoc-plugin</artifactId>
 		    <version>3.1.1</version>
@@ -204,7 +218,7 @@
 			<phase>package</phase>
 		      </execution>
 		    </executions>
-		  </plugin>
+		  </plugin>-->
       </plugins>
     </build>
 </project>
