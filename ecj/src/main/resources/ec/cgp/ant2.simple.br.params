@@ -3,12 +3,11 @@
 # function's values given a set of input values.
 #
 # Representation: Integer-based Cartesian Genetic Programming.
-# Algorithm: 1+4 ES.  Parent is selected uniformly at random
-# from set of individuals with fitness equal to top fitness of
-# generation.
+# Algorithm: Steady state baseline mutation. All individuals are mutated once per generation,
+# No selection for baseline robustness
 # 
 parent.0 = simple-cgp.params
-stat.file = $ant2.int.1+4.params.out.stat
+#stat.file = $ant2.simple.br.params.out.stat
 
 #================================================================================
 # Set up 1+4 evolutionary strategy
@@ -80,7 +79,7 @@ pop.subpop.0.species.maxArity = 2
 
 #set up baseline mutation
 pop.subpop.0.species.pipe = ec.vector.breed.VectorBaselineMutationPipeline
-cgp.baselinemutation.keepbest = true
+cgp.baselinemutation.keepbest = false
 pop.subpop.0.species.pipe.source.0 = ec.select.SteadySelection
 
 
@@ -110,10 +109,10 @@ eval.problem.file = santafe.trl
 # Our custom stats class prints out newly discovered best-of run individuals
 # as they are discovered.
 #================================================================================
-stat.file = $ant2.int.1+4.params.out.stat
+stat.file = $ant2.simple.br.params.out.stat
 stat = ec.cgp.Stats
 
 # Export population to file through statistics
 stat.num-children      = 1
 stat.child.0           = ec.cgp.VREStats
-stat.child.0.VRE-CSV = cgpvre.csv
+stat.child.0.VRE-CSV = cgp_br.csv
