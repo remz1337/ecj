@@ -664,7 +664,7 @@ public class ParameterDatabaseTest
         }
     */
     
-    /** Happy path should handle double arrays, including scientific notation and +/- infinity. */
+   /* *//** Happy path should handle double arrays, including scientific notation and +/- infinity. *//*
     @Test
     public void testGetDoubles1()
         {
@@ -676,7 +676,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** If the parameter is empty, return null. */
+    *//** If the parameter is empty, return null. *//*
     @Test
     public void testGetDoubles2()
         {
@@ -687,7 +687,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** If the parameter contains non-double garbage, return null. */
+    *//** If the parameter contains non-double garbage, return null. *//*
     @Test
     public void testGetDoubles3()
         {
@@ -698,7 +698,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** If a value is below the given minimum, return null.  */
+    *//** If a value is below the given minimum, return null.  *//*
     @Test
     public void testGetDoubles4()
         {
@@ -709,7 +709,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** If a value is below the given minimum, return null.  */
+    *//** If a value is below the given minimum, return null.  *//*
     @Test
     public void testGetDoubles5()
         {
@@ -720,7 +720,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** If a value is exactly the given minimum, return the array.  */
+    *//** If a value is exactly the given minimum, return the array.  *//*
     @Test
     public void testGetDoubles6()
         {
@@ -732,7 +732,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** If a value is exactly the given minimum, return the array.  */
+    *//** If a value is exactly the given minimum, return the array.  *//*
     @Test
     public void testGetDoubles7()
         {
@@ -744,7 +744,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** Use default parameter if first one is missing. */
+    *//** Use default parameter if first one is missing. *//*
     @Test
     public void testGetDoubles8()
         {
@@ -757,7 +757,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** If both primary and default parameters are missing, return null. */
+    *//** If both primary and default parameters are missing, return null. *//*
     @Test
     public void testGetDoubles9()
         {
@@ -768,7 +768,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Happy path with default parameter and minimum value. */
+    *//** Happy path with default parameter and minimum value. *//*
     @Test
     public void testGetDoubles10()
         {
@@ -781,7 +781,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** Enforce minimum value with default parameter. */
+    *//** Enforce minimum value with default parameter. *//*
     @Test
     public void testGetDoubles11()
         {
@@ -793,7 +793,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Happy path with minimum value and expected length. */
+    *//** Happy path with minimum value and expected length. *//*
     @Test
     public void testGetDoubles12()
         {
@@ -805,7 +805,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** Enforce minimum value with expected length. */
+    *//** Enforce minimum value with expected length. *//*
     @Test
     public void testGetDoubles13()
         {
@@ -816,7 +816,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Enforce expected length with minimum value. */
+    *//** Enforce expected length with minimum value. *//*
     @Test
     public void testGetDoubles14()
         {
@@ -827,7 +827,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Enforce both expected length and minimum value. */
+    *//** Enforce both expected length and minimum value. *//*
     @Test
     public void testGetDoubles15()
         {
@@ -838,7 +838,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Happy path with default parameter, minimum value, and expected length. */
+    *//** Happy path with default parameter, minimum value, and expected length. *//*
     @Test
     public void testGetDoubles16()
         {
@@ -851,7 +851,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** Return null for a missing default parameter with minimum value and expected length. */
+    *//** Return null for a missing default parameter with minimum value and expected length. *//*
     @Test
     public void testGetDoubles17()
         {
@@ -862,7 +862,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Happy path with primary parameter, default parameter, minimum value, and expected length. */
+    *//** Happy path with primary parameter, default parameter, minimum value, and expected length. *//*
     @Test
     public void testGetDoubles18()
         {
@@ -876,7 +876,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** Enforce minimum value with default parameter and expected length. */
+    *//** Enforce minimum value with default parameter and expected length. *//*
     @Test
     public void testGetDoubles19()
         {
@@ -888,7 +888,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Enforce expected length with default parameter and minimum value. */
+    *//** Enforce expected length with default parameter and minimum value. *//*
     @Test
     public void testGetDoubles20()
         {
@@ -900,7 +900,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Enforce minimum value and expected length with default parameter. */
+    *//** Enforce minimum value and expected length with default parameter. *//*
     @Test
     public void testGetDoubles21()
         {
@@ -912,7 +912,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Happy path should handle double arrays, including scientific notation and +/- infinity. */
+    *//** Happy path should handle double arrays, including scientific notation and +/- infinity. *//*
     @Test
     public void testGetDoublesUnconstrained1()
         {
@@ -924,7 +924,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** Ignore default parameter if first one is present. */
+    *//** Ignore default parameter if first one is present. *//*
     @Test
     public void testGetDoublesUnconstrained2()
         {
@@ -938,7 +938,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** Use default parameter if first one is missing. */
+    *//** Use default parameter if first one is missing. *//*
     @Test
     public void testGetDoublesUnconstrained3()
         {
@@ -951,7 +951,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** If both primary and default parameters are missing, return null. */
+    *//** If both primary and default parameters are missing, return null. *//*
     @Test
     public void testGetDoublesUnconstrained4()
         {
@@ -962,7 +962,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Happy path with expected length. */
+    *//** Happy path with expected length. *//*
     @Test
     public void testGetDoublesUnconstrained5()
         {
@@ -974,7 +974,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** If parameter doesn't match expected length, return null. */
+    *//** If parameter doesn't match expected length, return null. *//*
     @Test
     public void testGetDoublesUnconstrained6()
         {
@@ -985,7 +985,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Happy path with default parameter and expected length. */
+    *//** Happy path with default parameter and expected length. *//*
     @Test
     public void testGetDoublesUnconstrained7()
         {
@@ -998,7 +998,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** Enforce expected length with default parameter. */
+    *//** Enforce expected length with default parameter. *//*
     @Test
     public void testGetDoublesUnconstrained8()
         {
@@ -1010,7 +1010,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Happy path with maximum value */
+    *//** Happy path with maximum value *//*
     @Test
     public void testGetDoublesWithMax1()
         {
@@ -1022,7 +1022,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** Return null if an element is greater than the maximum value. */
+    *//** Return null if an element is greater than the maximum value. *//*
     @Test
     public void testGetDoublesWithMax2()
         {
@@ -1033,7 +1033,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Return null if an element is less than the minimum value. */
+    *//** Return null if an element is less than the minimum value. *//*
     @Test
     public void testGetDoublesWithMax3()
         {
@@ -1044,7 +1044,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Enforce both maximum and minimum value. */
+    *//** Enforce both maximum and minimum value. *//*
     @Test
     public void testGetDoublesWithMax4()
         {
@@ -1055,7 +1055,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Happy path with expected length. */
+    *//** Happy path with expected length. *//*
     @Test
     public void testGetDoublesWithMax6()
         {
@@ -1067,7 +1067,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(expected, result, 0.000001);
         }
     
-    /** Enforce expected length. */
+    *//** Enforce expected length. *//*
     @Test
     public void testGetDoublesWithMax7()
         {
@@ -1078,7 +1078,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Enforce maximum value with expected length. */
+    *//** Enforce maximum value with expected length. *//*
     @Test
     public void testGetDoublesWithMax8()
         {
@@ -1089,7 +1089,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Enforce minimum value with expected length. */
+    *//** Enforce minimum value with expected length. *//*
     @Test
     public void testGetDoublesWithMax9()
         {
@@ -1100,7 +1100,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Enforce minimum value and maximum value with expected length. */
+    *//** Enforce minimum value and maximum value with expected length. *//*
     @Test
     public void testGetDoublesWithMax10()
         {
@@ -1111,7 +1111,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Enforce minimum value, maximum value, and expected length. */
+    *//** Enforce minimum value, maximum value, and expected length. *//*
     @Test
     public void testGetDoublesWithMax11()
         {
@@ -1122,7 +1122,7 @@ public class ParameterDatabaseTest
         assertArrayEquals(null, result, 0.000001);
         }
     
-    /** Happy path with default parameter and expected length. */
+    *//** Happy path with default parameter and expected length. *//*
     @Test
     public void testGetDoublesWithMax12()
         {
@@ -1134,5 +1134,5 @@ public class ParameterDatabaseTest
         final double[] result = instance.getDoublesWithMax(a, b, 0.0, Double.POSITIVE_INFINITY, 4);
         assertArrayEquals(expected, result, 0.000001);
         }
-    
+    */
 }

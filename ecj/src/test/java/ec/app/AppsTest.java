@@ -89,6 +89,12 @@ public class AppsTest
     
     public final static List<String> exclude = Arrays.asList(new String[]
     {
+            // Custom exclusion for my Windows 10 environment
+            new File("src/main/resources/ec/app/command/command.params").getAbsolutePath(),
+            new File("src/main/resources/ec/app/moosuite/qv.params").getAbsolutePath(),
+            new File("src/main/resources/ec/app/moosuite/unconstrained-f3.params").getAbsolutePath(),
+            new File("src/main/resources/ec/app/moosuite/unconstrained-f3.params").getAbsolutePath(),
+
         // Parent files; can't be run directly
         new File("src/main/resources/ec/app/moosuite/moosuite.params").getAbsolutePath(),
         new File("src/main/resources/ec/app/moosuite/nsga2.params").getAbsolutePath(),
