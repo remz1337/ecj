@@ -28,3 +28,4 @@ manual.ind
 manual.fdb_latexmk
 manual.ilg
 problem_err.txt
+*.fa
