@@ -15,13 +15,18 @@ parent.0 = ../../simple/simple.params
 stat =					                        ec.simple.SimpleStatistics
 stat.file = 			                        $out.stat
 
+# Export population to file through statistics
+stat.num-children      = 1
+stat.child.0           = ec.vre.VREStats
+stat.child.0.VRE-CSV = rna.csv
+
 
 ##############################
 # Problem
 ##############################
 eval.problem =                                  ec.app.rna.RNAProblem
 eval.problem.command =                          src/main/resources/ec/app/rna/VRNA.bat
-eval.problem.target-phenotype =                 .(((...))).....
+eval.problem.target-phenotype =                 ........(((((....))).)).......
 
 
 ##############################
@@ -38,11 +43,11 @@ breed.elite.0 = 0
 ##############################
 # Representation
 ##############################
-pop.subpop.0.size =			                    50
+pop.subpop.0.size =			                    25
 pop.subpop.0.species =                          ec.vector.CharVectorSpecies
 pop.subpop.0.species.fitness =		            ec.simple.SimpleFitness
 pop.subpop.0.species.ind =		                ec.vector.CharVectorIndividual
-pop.subpop.0.species.genome-size = 	            15
+pop.subpop.0.species.genome-size = 	            30
 #pop.subpop.0.species.min-gene =	                -5.12
 #pop.subpop.0.species.max-gene =	                5.12
 pop.subpop.0.species.alphabet =	                AUCG

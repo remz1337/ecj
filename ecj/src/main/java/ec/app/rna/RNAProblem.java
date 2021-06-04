@@ -2,6 +2,7 @@ package ec.app.rna;
 
 import ec.EvolutionState;
 import ec.Individual;
+//import ec.vector.CharVectorIndividual;
 import ec.Population;
 import ec.Problem;
 import ec.coevolve.GroupedProblemForm;
@@ -81,6 +82,7 @@ public class RNAProblem extends Problem implements SimpleProblemForm, GroupedPro
             {
             final String simulationResult = runCommand(individuals);
             final List<Double> fitnesses = parseFitnesses(simulationResult);
+            final List<String> phenotypes = parsePhenotypes(simulationResult);
 
             if (fitnesses.size() != individuals.length)
                     throw new IllegalStateException(String.format("Sent %d individuals to external command, but the returned simulation results had %d lines.", RNAProblem.class.getSimpleName(), individuals.length, fitnesses.size()));
@@ -88,6 +90,8 @@ public class RNAProblem extends Problem implements SimpleProblemForm, GroupedPro
             for (int i = 0; i < individuals.length; i++)
                 {
                 final Individual ind = individuals[i];
+                ind.phenotype=phenotypes.get(i);
+                //With SimpleFitness, higher fitness is better
                 Double simple_fitness = ind.size() - fitnesses.get(i);//Max Length - distance
                 ind.fitness = new SimpleFitness();
                 Boolean isIdeal=false;
@@ -194,10 +198,31 @@ public class RNAProblem extends Problem implements SimpleProblemForm, GroupedPro
                 final List<Double> fitnesses = new ArrayList<>();
                 for (final String f : lines)
                     {
-                    final double realFitness = Double.valueOf(f);
+                    final String[] items = f.split(" ");  // Split on white space
+                    final double realFitness = Double.valueOf(items[1]);
                     fitnesses.add(realFitness);
                     }
                 return fitnesses;
+            } catch (Exception e) {
+                throw new IllegalArgumentException(String.format("%s: error (%s) while parsing fitness response \"%s\"", RNAProblem.class.getSimpleName(), e, simResult));
+            }
+        }
+
+
+        public static List<String> parsePhenotypes(final String simResult)
+        {
+            if (simResult.isEmpty())
+                throw new IllegalArgumentException(String.format("%s: response from external fitness command was empty.", RNAProblem.class.getSimpleName()));
+
+            try {
+                final String[] lines = simResult.split("\\r?\\n");  // Split on either Windows or UNIX line endings
+                final List<String> phenotypes = new ArrayList<>();
+                for (final String f : lines)
+                {
+                    final String[] items = f.split(" ");  // Split on white space
+                    phenotypes.add(items[0]);
+                }
+                return phenotypes;
             } catch (Exception e) {
                 throw new IllegalArgumentException(String.format("%s: error (%s) while parsing fitness response \"%s\"", RNAProblem.class.getSimpleName(), e, simResult));
             }
