@@ -5,6 +5,7 @@ import ec.EvolutionState;
 import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
 import ec.vector.VectorDefaults;
+import ec.vector.BaselineVectorIndividual;
 import ec.vector.VectorSpecies;
 
 /**
@@ -15,7 +16,7 @@ import ec.vector.VectorSpecies;
  * @author David Oranchak, doranchak@gmail.com, http://oranchak.com
  * 
  */
-public class IntegerVectorIndividual extends VectorIndividualCGP {
+public class IntegerVectorIndividual extends BaselineVectorIndividual {
 
 	public static final String P_INTEGERVECTORINDIVIDUAL = "int-vect-ind";
 
@@ -59,8 +60,12 @@ public class IntegerVectorIndividual extends VectorIndividualCGP {
 
 		MersenneTwisterFast srt = state.random[thread];
 		int genePos = srt.nextInt(genome.length);
-
-		genome[genePos] = randomValueFromClosedInterval(0, s.computeMaxGene(genePos, genome), state.random[thread]);
+		//make sure it's different from initial value
+		int new_val=genome[genePos];
+		while (new_val == genome[genePos]){
+			new_val = randomValueFromClosedInterval(0, s.computeMaxGene(genePos, genome), state.random[thread]);
+		}
+		genome[genePos] = new_val;
 	}
 
 	/** Initialize individual. */

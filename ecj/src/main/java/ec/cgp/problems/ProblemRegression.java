@@ -1,15 +1,11 @@
 package ec.cgp.problems;
 
 import ec.*;
-import ec.gp.GPIndividual;
-import ec.simple.*;
 import ec.util.*;
-import ec.vector.*;
 import ec.cgp.Evaluator;
 import ec.cgp.FitnessCGP;
-import ec.cgp.representation.VectorIndividualCGP;
+import ec.vector.BaselineVectorIndividual;
 import ec.cgp.representation.VectorSpeciesCGP;
-import ec.multiobjective.*;
 
 import java.util.*;
 
@@ -45,7 +41,7 @@ public class ProblemRegression extends ProblemCGP {
 
 		phenotype = new ArrayList<Float>();
 		VectorSpeciesCGP s = (VectorSpeciesCGP) ind.species;
-		VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
+		BaselineVectorIndividual ind2 = (BaselineVectorIndividual) ind;
 		
 		float diff = 0f;
 		

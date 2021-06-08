@@ -78,7 +78,7 @@ pop.subpop.0.species.maxArity = 2
 #pop.subpop.0.species.pipe.source.0 = ec.cgp.ESSelectionCGP
 
 #set up baseline mutation
-pop.subpop.0.species.pipe = ec.vector.breed.VectorBaselineMutationPipeline
+pop.subpop.0.species.pipe = ec.vector.VectorBaselineMutationPipeline
 cgp.baselinemutation.keepbest = false
 pop.subpop.0.species.pipe.source.0 = ec.select.SteadySelection
 

@@ -7,6 +7,7 @@ import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
 import ec.vector.VectorDefaults;
 import ec.vector.VectorIndividual;
+import ec.vector.BaselineVectorIndividual;
 import ec.vector.VectorSpecies;
 
 /**
@@ -18,7 +19,7 @@ import ec.vector.VectorSpecies;
  * @author David Oranchak, doranchak@gmail.com, http://oranchak.com
  * 
  */
-public class FloatVectorIndividual extends VectorIndividualCGP {
+public class FloatVectorIndividual extends BaselineVectorIndividual {
 	public static final String P_FLOATVECTORINDIVIDUAL = "float-vect-ind";
 
 	/** the genome */

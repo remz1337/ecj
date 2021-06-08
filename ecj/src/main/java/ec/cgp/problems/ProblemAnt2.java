@@ -5,10 +5,9 @@ package ec.cgp.problems;
 
 import ec.EvolutionState;
 import ec.Individual;
-import ec.Problem;
 import ec.cgp.Evaluator;
 import ec.cgp.FitnessCGP;
-import ec.cgp.representation.VectorIndividualCGP;
+import ec.vector.BaselineVectorIndividual;
 import ec.cgp.representation.VectorSpeciesCGP;
 import ec.util.Parameter;
 
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
-import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 /**
@@ -210,7 +208,7 @@ public class ProblemAnt2 extends ProblemCGP {
 			reset();
 
 			VectorSpeciesCGP s = (VectorSpeciesCGP) ind.species;
-			VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
+			BaselineVectorIndividual ind2 = (BaselineVectorIndividual) ind;
 
 			float diff = 0f;
 
@@ -259,7 +257,7 @@ public class ProblemAnt2 extends ProblemCGP {
 //		phenotype = "";
 		reset();
 
-		VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
+		BaselineVectorIndividual ind2 = (BaselineVectorIndividual) ind;
 
 		int[][] map2 = new int[map.length][];
 		for(int x=0;x<map.length;x++)

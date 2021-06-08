@@ -5,19 +5,13 @@
 */
 
 
-package ec.vector.breed;
+package ec.vector;
 
 import ec.BreedingPipeline;
 import ec.EvolutionState;
 import ec.Individual;
-import ec.cgp.representation.IntegerVectorSpecies;
-import ec.cgp.representation.VectorIndividualCGP;
-import ec.cgp.representation.VectorSpeciesCGP;
 import ec.simple.SimpleProblemForm;
-import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
-import ec.vector.VectorDefaults;
-import ec.vector.VectorIndividual;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,7 +63,7 @@ public class VectorBaselineMutationPipeline extends BreedingPipeline
         {
             super.setup(state,base);
             //Parameter p= new Parameter("gep.baselinemutation.keepbest");
-            Parameter p= new Parameter("cgp.baselinemutation.keepbest");
+            Parameter p= new Parameter("vre.baselinemutation.keepbest");
 
             //String temp=state.parameters.getStringWithDefault(p,null,"hello");
             //String temp2=state.parameters.getStringWithDefault(base.push(P_KEEPBEST),null,"hello");
@@ -122,8 +116,8 @@ public class VectorBaselineMutationPipeline extends BreedingPipeline
             {
 
                 try {
-                    VectorIndividualCGP oldind = (VectorIndividualCGP)inds.get(q).clone();
-                    VectorIndividualCGP ind = (VectorIndividualCGP)inds.get(q); // the genome (chromosome) to mutate
+                    BaselineVectorIndividual oldind = (BaselineVectorIndividual)inds.get(q).clone();
+                    BaselineVectorIndividual ind = (BaselineVectorIndividual)inds.get(q); // the genome (chromosome) to mutate
 
                     //((VectorIndividualCGP)inds.get(q)).baselineMutate(state,thread);
                     //((VectorIndividualCGP)inds.get(q)).evaluated=false;

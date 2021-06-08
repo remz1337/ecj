@@ -1,16 +1,10 @@
 package ec.cgp.problems;
 
 import ec.*;
-import ec.simple.*;
-import ec.util.*;
-import ec.vector.*;
 import ec.cgp.Evaluator;
 import ec.cgp.FitnessCGP;
-import ec.cgp.representation.VectorIndividualCGP;
+import ec.vector.BaselineVectorIndividual;
 import ec.cgp.representation.VectorSpeciesCGP;
-import ec.multiobjective.*;
-
-import java.util.*;
 
 /**
  * 
@@ -41,7 +35,7 @@ public class ProblemParity extends ProblemCGP {
 		if (NUM_BITS == 0)
 			NUM_BITS = s.numInputs;
 		
-		VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
+		BaselineVectorIndividual ind2 = (BaselineVectorIndividual) ind;
 
 		int diff = 0;
 		Boolean[] inputs;

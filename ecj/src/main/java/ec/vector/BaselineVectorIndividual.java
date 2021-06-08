@@ -1,4 +1,4 @@
-package ec.cgp.representation;
+package ec.vector;
 
 import ec.EvolutionState;
 import ec.vector.VectorIndividual;
@@ -10,7 +10,7 @@ import ec.vector.VectorIndividual;
  * @author David Oranchak, doranchak@gmail.com, http://oranchak.com
  * 
  */
-public abstract class VectorIndividualCGP extends VectorIndividual {
+public abstract class BaselineVectorIndividual extends VectorIndividual {
 
 	/** Temporary storage for displaying the full program */
 	public StringBuffer expression;

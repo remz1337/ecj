@@ -5,7 +5,7 @@ import ec.EvolutionState;
 import ec.Individual;
 import ec.Population;
 import ec.Subpopulation;
-import ec.cgp.representation.VectorIndividualCGP;
+import ec.vector.BaselineVectorIndividual;
 import ec.es.MuPlusLambdaBreeder;
 
 /**
@@ -25,7 +25,7 @@ public class MuLambdaBreederCGP extends MuPlusLambdaBreeder {
             {
                 for (final Subpopulation subpop : state.population.subpops)
                     for (final Individual ind : subpop.individuals)
-                        ((VectorIndividualCGP)ind).expression = null;
+                        ((BaselineVectorIndividual)ind).expression = null;
 		return super.breedPopulation(state);
             }
 
