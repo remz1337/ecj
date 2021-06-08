@@ -25,54 +25,10 @@ import java.io.LineNumberReader;
  */
 
 /**
- * IntegerVectorIndividual is a VectorIndividual whose genome is an array of ints.
- * Gene values may range from species.mingene(x) to species.maxgene(x), inclusive.
- * The default mutation method randomizes genes to new values in this range,
+ * CharVectorIndividual is a VectorIndividual whose genome is an array of chars.
+ * Gene values are comprised of the alphabet defined by the specie.
+ * The default mutation method randomizes genes to new values in the alphabet,
  * with <tt>species.mutationProbability</tt>.
- *
-
- * <P><b>From ec.Individual:</b>  
- * <p>In addition to serialization for checkpointing, Individuals may read and write themselves to streams in three ways.
- *
- * <ul>
- * <li><b>writeIndividual(...,DataOutput)/readIndividual(...,DataInput)</b>&nbsp;&nbsp;&nbsp;This method
- * transmits or receives an individual in binary.  It is the most efficient approach to sending
- * individuals over networks, etc.  These methods write the evaluated flag and the fitness, then
- * call <b>readGenotype/writeGenotype</b>, which you must implement to write those parts of your 
- * Individual special to your functions-- the default versions of readGenotype/writeGenotype throw errors.
- * You don't need to implement them if you don't plan on using read/writeIndividual.
- *
- * <li><b>printIndividual(...,PrintWriter)/readIndividual(...,LineNumberReader)</b>&nbsp;&nbsp;&nbsp;This
- * approach transmits or receives an indivdual in text encoded such that the individual is largely readable
- * by humans but can be read back in 100% by ECJ as well.  To do this, these methods will encode numbers
- * using the <tt>ec.util.Code</tt> class.  These methods are mostly used to write out populations to
- * files for inspection, slight modification, then reading back in later on.  <b>readIndividual</b> reads
- * in the fitness and the evaluation flag, then calls <b>parseGenotype</b> to read in the remaining individual.
- * You are responsible for implementing parseGenotype: the Code class is there to help you.
- * <b>printIndividual</b> writes out the fitness and evaluation flag, then calls <b>genotypeToString</b> 
- * and printlns the resultant string. You are responsible for implementing the genotypeToString method in such
- * a way that parseGenotype can read back in the individual println'd with genotypeToString.  The default form
- * of genotypeToString simply calls <b>toString</b>, which you may override instead if you like.  The default
- * form of <b>parseGenotype</b> throws an error.  You are not required to implement these methods, but without
- * them you will not be able to write individuals to files in a simultaneously computer- and human-readable fashion.
- *
- * <li><b>printIndividualForHumans(...,PrintWriter)</b>&nbsp;&nbsp;&nbsp;This
- * approach prints an individual in a fashion intended for human consumption only.
- * <b>printIndividualForHumans</b> writes out the fitness and evaluation flag, then calls <b>genotypeToStringForHumans</b> 
- * and printlns the resultant string. You are responsible for implementing the genotypeToStringForHumans method.
- * The default form of genotypeToStringForHumans simply calls <b>toString</b>, which you may override instead if you like
- * (though note that genotypeToString's default also calls toString).  You should handle one of these methods properly
- * to ensure individuals can be printed by ECJ.
- * </ul>
-
- * <p>In general, the various readers and writers do three things: they tell the Fitness to read/write itself,
- * they read/write the evaluated flag, and they read/write the gene array.  If you add instance variables to
- * a VectorIndividual or subclass, you'll need to read/write those variables as well.
- <p><b>Default Base</b><br>
- vector.int-vect-ind
-
- * @author Sean Luke
- * @version 1.0
  */
 
 public class CharVectorIndividual extends VectorIndividual
@@ -288,21 +244,30 @@ public class CharVectorIndividual extends VectorIndividual
 
     /** Destructively mutates the individual in some default manner.  The default form
         simply randomizes genes to a uniform distribution from the min and max of the gene values. */
-    public void defaultMutate(EvolutionState state, int thread)
-        {
+    public void defaultMutate(EvolutionState state, int thread) {
         CharVectorSpecies s = (CharVectorSpecies) species;
-        for(int x = 0; x < genome.length; x++)
-            if (state.random[thread].nextBoolean(s.mutationProbability(x)))
-                {
-                char old = genome[x];
-                for(int retries = 0; retries < s.duplicateRetries(x) + 1; retries++)
-                    {
-                    switch(s.mutationType(x))
-                        {
-                        case CharVectorSpecies.C_RESET_MUTATION:
-                            //genome[x] = randomValueFromClosedInterval((char)s.minGene(x), (char)s.maxGene(x), state.random[thread]);
-                            genome[x] = randomValueFromAlphabet(s.alphabet, state.random[thread]);
-                            break;
+
+        //check if baseline first
+        if (s.isBaselineMutation) {
+            MersenneTwisterFast srt = state.random[thread];
+            int genePos = srt.nextInt(genome.length);
+
+            //make sure it's different from initial value
+            char new_val=genome[genePos];
+            while (new_val == genome[genePos]){
+                new_val = randomValueFromAlphabet(s.alphabet, state.random[thread]);
+            }
+            genome[genePos] = new_val;
+        } else {
+            for (int x = 0; x < genome.length; x++) {
+                if (state.random[thread].nextBoolean(s.mutationProbability(x))) {
+                    char old = genome[x];
+                    for (int retries = 0; retries < s.duplicateRetries(x) + 1; retries++) {
+                        switch (s.mutationType(x)) {
+                            case CharVectorSpecies.C_RESET_MUTATION:
+                                //genome[x] = randomValueFromClosedInterval((char)s.minGene(x), (char)s.maxGene(x), state.random[thread]);
+                                genome[x] = randomValueFromAlphabet(s.alphabet, state.random[thread]);
+                                break;
 /*                        case CharVectorSpecies.C_RANDOM_WALK_MUTATION:
                             int min = (int)s.minGene(x);
                             int max = (int)s.maxGene(x);
@@ -325,15 +290,17 @@ public class CharVectorIndividual extends VectorIndividual
                                 }
                             while (state.random[thread].nextBoolean(s.randomWalkProbability(x)));
                             break;*/
-                        default:
-                            state.output.fatal("In CharVectorIndividual.defaultMutate, default case occurred when it shouldn't have");
-                            break;
+                            default:
+                                state.output.fatal("In CharVectorIndividual.defaultMutate, default case occurred when it shouldn't have");
+                                break;
                         }
-                    if (genome[x] != old) break;
-                    // else genome[x] = old;  // try again
+                        if (genome[x] != old) break;
+                        // else genome[x] = old;  // try again
                     }
                 }
+            }
         }
+    }
         
     
     /** Initializes the individual by randomly choosing Integers uniformly from mingene to maxgene. */

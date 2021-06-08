@@ -32,53 +32,37 @@ eval.problem.target-phenotype =                 ........(((((....))).)).......
 ##############################
 # Population Model
 ##############################
-generations =				                    500
+generations =				                    200
 quit-on-run-complete =			                true
 breed =					                        ec.simple.SimpleBreeder
 breed.elite.0 = 0
-#es.mu.0 = 				                        2
-#es.lambda.0 =                                   20
 
 
 ##############################
 # Representation
 ##############################
-pop.subpop.0.size =			                    25
+pop.subpop.0.size =			                    1
 pop.subpop.0.species =                          ec.vector.CharVectorSpecies
 pop.subpop.0.species.fitness =		            ec.simple.SimpleFitness
 pop.subpop.0.species.ind =		                ec.vector.CharVectorIndividual
 pop.subpop.0.species.genome-size = 	            30
-#pop.subpop.0.species.min-gene =	                -5.12
-#pop.subpop.0.species.max-gene =	                5.12
 pop.subpop.0.species.alphabet =	                AUCG
 
 
 ##############################
 # Operator Pipeline
 ##############################
-#pop.subpop.0.species.pipe = 		            ec.vector.breed.VectorMutationPipeline
-#pop.subpop.0.species.pipe.source.0 = 	        ec.vector.breed.VectorCrossoverPipeline
-#pop.subpop.0.species.pipe.source.0.source.0 =   ec.es.ESSelection
-#pop.subpop.0.species.pipe.source.0.source.1 =   ec.es.ESSelection
-
-
-#pop.subpop.0.species.pipe = ec.vector.breed.VectorBaselineMutationPipeline
-#cgp.baselinemutation.keepbest = true
-pop.subpop.0.species.pipe = ec.vector.breed.VectorMutationPipeline
-pop.subpop.0.species.pipe.source.0 = ec.select.TournamentSelection
+pop.subpop.0.species.pipe = ec.vector.breed.VectorBaselineMutationPipeline
+vre.baselinemutation.keepbest = false
+pop.subpop.0.species.pipe.source.0 = ec.select.SteadySelection
 
 
 # Mutation parameters
-pop.subpop.0.species.mutation-prob =            0.5
-#pop.subpop.0.species.mutation-stdev =           0.5
-pop.subpop.0.species.mutation-type =            reset
-#pop.subpop.0.species.mutation-bounded =	        true
+pop.subpop.0.species.mutation-prob =            0.95
+pop.subpop.0.species.mutation-type =            baseline
 
-# Crossover parameters
-# ECJ will complain if this isn't set even if we don't use it, so here's a default
-pop.subpop.0.species.crossover-type =           one
-
-# Selection parameters
-select.tournament.size = 		                2
+# Random seed
+#seed.0 = time
+seed.0 = 1337
 
 
