@@ -30,8 +30,8 @@ pop.subpop.0 = ec.Subpopulation
 # modify es.mu and es.lambda.
 #================================================================================
 pop.subpop.0.size = 5
-pop.subpop.0.species = ec.cgp.representation.IntegerVectorSpecies
-pop.subpop.0.species.ind = ec.cgp.representation.IntegerVectorIndividual
+pop.subpop.0.species = ec.cgp.representation.IntegerVectorSpeciesCGP
+pop.subpop.0.species.ind = ec.cgp.representation.IntegerVectorIndividualCGP
 
 #================================================================================
 # Our own fitness.  A simple modification that makes smaller fitnesses better.

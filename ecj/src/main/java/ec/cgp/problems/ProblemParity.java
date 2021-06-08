@@ -3,7 +3,7 @@ package ec.cgp.problems;
 import ec.*;
 import ec.cgp.Evaluator;
 import ec.cgp.FitnessCGP;
-import ec.vector.BaselineVectorIndividual;
+import ec.cgp.representation.VectorIndividualCGP;
 import ec.cgp.representation.VectorSpeciesCGP;
 
 /**
@@ -35,7 +35,7 @@ public class ProblemParity extends ProblemCGP {
 		if (NUM_BITS == 0)
 			NUM_BITS = s.numInputs;
 		
-		BaselineVectorIndividual ind2 = (BaselineVectorIndividual) ind;
+		VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
 
 		int diff = 0;
 		Boolean[] inputs;

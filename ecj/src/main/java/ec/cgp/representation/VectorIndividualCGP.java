@@ -1,4 +1,4 @@
-package ec.vector;
+package ec.cgp.representation;
 
 import ec.EvolutionState;
 import ec.vector.VectorIndividual;
@@ -10,7 +10,7 @@ import ec.vector.VectorIndividual;
  * @author David Oranchak, doranchak@gmail.com, http://oranchak.com
  * 
  */
-public abstract class BaselineVectorIndividual extends VectorIndividual {
+public abstract class VectorIndividualCGP extends VectorIndividual {
 
 	/** Temporary storage for displaying the full program */
 	public StringBuffer expression;
@@ -18,6 +18,6 @@ public abstract class BaselineVectorIndividual extends VectorIndividual {
 	/** Return the genome. */
 	public abstract Object getGenome();
 
-	public abstract void baselineMutate(EvolutionState state, int thread);
+	//public abstract void baselineMutate(EvolutionState state, int thread);
 
 }

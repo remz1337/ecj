@@ -7,7 +7,6 @@ import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
 import ec.vector.VectorDefaults;
 import ec.vector.VectorIndividual;
-import ec.vector.BaselineVectorIndividual;
 import ec.vector.VectorSpecies;
 
 /**
@@ -19,7 +18,7 @@ import ec.vector.VectorSpecies;
  * @author David Oranchak, doranchak@gmail.com, http://oranchak.com
  * 
  */
-public class FloatVectorIndividual extends BaselineVectorIndividual {
+public class FloatVectorIndividualCGP extends VectorIndividualCGP {
 	public static final String P_FLOATVECTORINDIVIDUAL = "float-vect-ind";
 
 	/** the genome */
@@ -31,7 +30,7 @@ public class FloatVectorIndividual extends BaselineVectorIndividual {
 
 	/** Make a full copy of this individual. */
 	public Object clone() {
-		FloatVectorIndividual myobj = (FloatVectorIndividual) (super
+		FloatVectorIndividualCGP myobj = (FloatVectorIndividualCGP) (super
 				.clone());
 
 		// must clone the genome
@@ -44,25 +43,37 @@ public class FloatVectorIndividual extends BaselineVectorIndividual {
 
 	/** Mutate the genome. Adapted from FloatVectorIndividual. */
 	public void defaultMutate(EvolutionState state, int thread) {
-		VectorSpeciesCGP s = (VectorSpeciesCGP) species;
+		FloatVectorSpeciesCGP s = (FloatVectorSpeciesCGP) species;
 		MersenneTwisterFast rng = state.random[thread];
 
-		for (int x = 0; x < genome.length; x++)
-			if (rng.nextBoolean(s.mutationProbability(x)))
-				genome[x] = rng.nextFloat();
+		//check if baseline first
+		if (s.isBaselineMutation) {
+			//MersenneTwisterFast srt = state.random[thread];
+			int genePos = rng.nextInt(genome.length);
+			//make sure it's different from initial value
+			float new_val = genome[genePos];
+			while (new_val == genome[genePos]) {
+				new_val = rng.nextFloat();
+			}
+			genome[genePos] = new_val;
+		} else {
+			for (int x = 0; x < genome.length; x++)
+				if (rng.nextBoolean(s.mutationProbability(x)))
+					genome[x] = rng.nextFloat();
 
+		}
 	}
 
-	public void baselineMutate(EvolutionState state, int thread) {
+/*	public void baselineMutate(EvolutionState state, int thread) {
 		defaultMutate(state, thread);
 		//TODO();
-	}
+	}*/
 
 	/** Any-point crossover; kept here for posterity. */
 	public void defaultCrossover2(EvolutionState state, int thread,
 			VectorIndividual ind) {
-		FloatVectorIndividual i = (FloatVectorIndividual) ind;
-		FloatVectorSpecies s = (FloatVectorSpecies) species;
+		FloatVectorIndividualCGP i = (FloatVectorIndividualCGP) ind;
+		FloatVectorSpeciesCGP s = (FloatVectorSpeciesCGP) species;
 		float tmp;
 
 		/* any point xover */
@@ -87,7 +98,7 @@ public class FloatVectorIndividual extends BaselineVectorIndividual {
 			VectorIndividual ind) {
 
 		VectorSpeciesCGP s = (VectorSpeciesCGP) species;
-		float[] p1 = ((FloatVectorIndividual) ind).genome;
+		float[] p1 = ((FloatVectorIndividualCGP) ind).genome;
 		float[] p2 = genome;
 		float tmp;
 
@@ -154,7 +165,7 @@ public class FloatVectorIndividual extends BaselineVectorIndividual {
 	public boolean equals(Object ind) {
 		if (!(this.getClass().equals(ind.getClass())))
 			return false; // SimpleRuleIndividuals are special.
-		FloatVectorIndividual i = (FloatVectorIndividual) ind;
+		FloatVectorIndividualCGP i = (FloatVectorIndividualCGP) ind;
 		if (genome.length != i.genome.length)
 			return false;
 		for (int j = 0; j < genome.length; j++)

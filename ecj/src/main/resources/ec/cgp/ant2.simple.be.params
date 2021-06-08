@@ -30,8 +30,8 @@ pop.subpop.0 = ec.Subpopulation
 # modify es.mu and es.lambda.
 #================================================================================
 pop.subpop.0.size = 1
-pop.subpop.0.species = ec.cgp.representation.IntegerVectorSpecies
-pop.subpop.0.species.ind = ec.cgp.representation.IntegerVectorIndividual
+pop.subpop.0.species = ec.cgp.representation.IntegerVectorSpeciesCGP
+pop.subpop.0.species.ind = ec.cgp.representation.IntegerVectorIndividualCGP
 
 #================================================================================
 # Our own fitness.  A simple modification that makes smaller fitnesses better.
@@ -41,7 +41,9 @@ pop.subpop.0.species.fitness = ec.cgp.FitnessCGP
 #================================================================================
 # Mutation rate.
 #================================================================================
-pop.subpop.0.species.mutation-prob = .04
+#pop.subpop.0.species.mutation-prob = .04
+pop.subpop.0.species.mutation-prob =            0.95
+pop.subpop.0.species.mutation-type =            baseline
 
 
 #================================================================================
@@ -77,11 +79,9 @@ pop.subpop.0.species.maxArity = 2
 #pop.subpop.0.species.pipe.source.0 = ec.cgp.ESSelectionCGP
 
 #set up baseline mutation
-pop.subpop.0.species.pipe = ec.vector.VectorBaselineMutationPipeline
+pop.subpop.0.species.pipe = ec.vector.breed.VectorBaselineMutationPipeline
 vre.baselinemutation.keepbest = true
 pop.subpop.0.species.pipe.source.0 = ec.select.SteadySelection
-
-
 
 #================================================================================
 # Class that sets up the regression problem.  Invokes the CGPEvaluator on all

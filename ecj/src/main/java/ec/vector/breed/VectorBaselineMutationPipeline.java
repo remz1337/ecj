@@ -5,13 +5,15 @@
 */
 
 
-package ec.vector;
+package ec.vector.breed;
 
 import ec.BreedingPipeline;
 import ec.EvolutionState;
 import ec.Individual;
+import ec.cgp.representation.VectorIndividualCGP;
 import ec.simple.SimpleProblemForm;
 import ec.util.Parameter;
+import ec.vector.VectorDefaults;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +50,7 @@ public class VectorBaselineMutationPipeline extends BreedingPipeline
     {
     private static final long serialVersionUID = 1;
 
-    public static final String P_BASELINEMUTATION = "baselinemutate";
+    public static final String P_BASELINEMUTATION = "baselinemutation";
     public static final int NUM_SOURCES = 1;
 
         private Boolean keepBest=false;
@@ -116,12 +118,13 @@ public class VectorBaselineMutationPipeline extends BreedingPipeline
             {
 
                 try {
-                    BaselineVectorIndividual oldind = (BaselineVectorIndividual)inds.get(q).clone();
-                    BaselineVectorIndividual ind = (BaselineVectorIndividual)inds.get(q); // the genome (chromosome) to mutate
+                    VectorIndividualCGP oldind = (VectorIndividualCGP)inds.get(q).clone();
+                    VectorIndividualCGP ind = (VectorIndividualCGP)inds.get(q); // the genome (chromosome) to mutate
 
                     //((VectorIndividualCGP)inds.get(q)).baselineMutate(state,thread);
                     //((VectorIndividualCGP)inds.get(q)).evaluated=false;
-                    ind.baselineMutate(state,thread);
+                    //ind.baselineMutate(state,thread);
+                    ind.defaultMutate(state,thread);
                     ind.evaluated=false;
 
                     if(keepBest){

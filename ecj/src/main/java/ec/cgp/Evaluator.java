@@ -10,9 +10,9 @@ import ec.Problem;
 import ec.cgp.functions.Functions;
 import ec.cgp.functions.FunctionsAnt2;
 import ec.cgp.problems.ProblemAnt2;
-import ec.cgp.representation.FloatVectorIndividual;
-import ec.cgp.representation.IntegerVectorIndividual;
-import ec.vector.BaselineVectorIndividual;
+import ec.cgp.representation.FloatVectorIndividualCGP;
+import ec.cgp.representation.IntegerVectorIndividualCGP;
+import ec.cgp.representation.VectorIndividualCGP;
 import ec.cgp.representation.VectorSpeciesCGP;
 
 /**
@@ -56,7 +56,7 @@ public class Evaluator {
 	 * @return array of computed outputs from our Cartesian genetic program
 	 */
 	public static Object[] evaluate(EvolutionState state, int threadNum,
-									Object[] inputs, BaselineVectorIndividual ind, final Problem prob) {
+									Object[] inputs, VectorIndividualCGP ind, final Problem prob) {
 		nodeMap.get(threadNum).clear();
 		expressionMap.get(threadNum).clear();
 		
@@ -67,10 +67,10 @@ public class Evaluator {
 		int[] gi = null;
 		float[] gf = null;
 		boolean isFloat = false;
-		if (ind instanceof IntegerVectorIndividual)
-			gi = ((IntegerVectorIndividual) ind).genome;
+		if (ind instanceof IntegerVectorIndividualCGP)
+			gi = ((IntegerVectorIndividualCGP) ind).genome;
 		else {
-			gf = ((FloatVectorIndividual) ind).genome;
+			gf = ((FloatVectorIndividualCGP) ind).genome;
 			isFloat = true;
 		}
 

@@ -11,7 +11,7 @@ import ec.cgp.Evaluator;
 import ec.cgp.FitnessCGP;
 import ec.cgp.Util;
 import ec.cgp.Record;
-import ec.vector.BaselineVectorIndividual;
+import ec.cgp.representation.VectorIndividualCGP;
 import ec.cgp.representation.VectorSpeciesCGP;
 import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
@@ -126,7 +126,7 @@ public abstract class ClassificationProblem extends ProblemCGP {
 	public void evaluate(EvolutionState state, Individual ind,
 			int subpopulation, int threadnum) {
 		VectorSpeciesCGP s = (VectorSpeciesCGP) ind.species;
-		BaselineVectorIndividual ind2 = (BaselineVectorIndividual) ind;
+		VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
 
 		Object[] inputs = new Object[s.numInputs];
 		for (int i = 0; i < constants.length; i++)
@@ -221,7 +221,7 @@ public abstract class ClassificationProblem extends ProblemCGP {
 	 * @return boolean vector indicating successful/unsuccessful classification(s).
 	 */
 	boolean[] eval(EvolutionState state, int threadnum, Object[] inputs,
-			Record rec, BaselineVectorIndividual ind) {
+			Record rec, VectorIndividualCGP ind) {
 		setInputs(inputs, rec);
 		Object[] outputs = Evaluator.evaluate(state, threadnum, inputs, ind, this);
 		return compare(outputs, rec);

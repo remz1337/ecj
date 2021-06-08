@@ -7,7 +7,7 @@ import ec.EvolutionState;
 import ec.Individual;
 import ec.cgp.Evaluator;
 import ec.cgp.FitnessCGP;
-import ec.vector.BaselineVectorIndividual;
+import ec.cgp.representation.VectorIndividualCGP;
 import ec.cgp.representation.VectorSpeciesCGP;
 import ec.util.Parameter;
 
@@ -208,7 +208,7 @@ public class ProblemAnt2 extends ProblemCGP {
 			reset();
 
 			VectorSpeciesCGP s = (VectorSpeciesCGP) ind.species;
-			BaselineVectorIndividual ind2 = (BaselineVectorIndividual) ind;
+			VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
 
 			float diff = 0f;
 
@@ -257,7 +257,7 @@ public class ProblemAnt2 extends ProblemCGP {
 //		phenotype = "";
 		reset();
 
-		BaselineVectorIndividual ind2 = (BaselineVectorIndividual) ind;
+		VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
 
 		int[][] map2 = new int[map.length][];
 		for(int x=0;x<map.length;x++)

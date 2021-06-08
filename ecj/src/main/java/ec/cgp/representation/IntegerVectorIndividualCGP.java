@@ -5,7 +5,6 @@ import ec.EvolutionState;
 import ec.util.MersenneTwisterFast;
 import ec.util.Parameter;
 import ec.vector.VectorDefaults;
-import ec.vector.BaselineVectorIndividual;
 import ec.vector.VectorSpecies;
 
 /**
@@ -16,7 +15,7 @@ import ec.vector.VectorSpecies;
  * @author David Oranchak, doranchak@gmail.com, http://oranchak.com
  * 
  */
-public class IntegerVectorIndividual extends BaselineVectorIndividual {
+public class IntegerVectorIndividualCGP extends VectorIndividualCGP {
 
 	public static final String P_INTEGERVECTORINDIVIDUAL = "int-vect-ind";
 
@@ -29,7 +28,7 @@ public class IntegerVectorIndividual extends BaselineVectorIndividual {
 
 	/** Make a full copy of this individual. */
 	public Object clone() {
-		IntegerVectorIndividual myobj = (IntegerVectorIndividual) (super
+		IntegerVectorIndividualCGP myobj = (IntegerVectorIndividualCGP) (super
 				.clone());
 
 		// must clone the genome
@@ -47,16 +46,29 @@ public class IntegerVectorIndividual extends BaselineVectorIndividual {
 	 * CGPVectorSpecies.computeMaxGene.
 	 */
 	public void defaultMutate(EvolutionState state, int thread) {
-		IntegerVectorSpecies s = (IntegerVectorSpecies) species;
-		for (int x = 0; x < genome.length; x++)
-			if (state.random[thread].nextBoolean(s.mutationProbability(x))) {
-				genome[x] = randomValueFromClosedInterval(0, s
-						.computeMaxGene(x, genome), state.random[thread]);
+		IntegerVectorSpeciesCGP s = (IntegerVectorSpeciesCGP) species;
+
+		//check if baseline first
+		if (s.isBaselineMutation) {
+			MersenneTwisterFast srt = state.random[thread];
+			int genePos = srt.nextInt(genome.length);
+			//make sure it's different from initial value
+			int new_val=genome[genePos];
+			while (new_val == genome[genePos]){
+				new_val = randomValueFromClosedInterval(0, s.computeMaxGene(genePos, genome), state.random[thread]);
 			}
+			genome[genePos] = new_val;
+		} else {
+			for (int x = 0; x < genome.length; x++)
+				if (state.random[thread].nextBoolean(s.mutationProbability(x))) {
+					genome[x] = randomValueFromClosedInterval(0, s
+							.computeMaxGene(x, genome), state.random[thread]);
+				}
+		}
 	}
 
-	public void baselineMutate(EvolutionState state, int thread) {
-		IntegerVectorSpecies s = (IntegerVectorSpecies) species;
+/*	public void baselineMutate(EvolutionState state, int thread) {
+		IntegerVectorSpeciesCGP s = (IntegerVectorSpeciesCGP) species;
 
 		MersenneTwisterFast srt = state.random[thread];
 		int genePos = srt.nextInt(genome.length);
@@ -66,11 +78,11 @@ public class IntegerVectorIndividual extends BaselineVectorIndividual {
 			new_val = randomValueFromClosedInterval(0, s.computeMaxGene(genePos, genome), state.random[thread]);
 		}
 		genome[genePos] = new_val;
-	}
+	}*/
 
 	/** Initialize individual. */
 	public void reset(EvolutionState state, int thread) {
-		IntegerVectorSpecies s = (IntegerVectorSpecies) species;
+		IntegerVectorSpeciesCGP s = (IntegerVectorSpeciesCGP) species;
 		for (int x = 0; x < genome.length; x++)
 			genome[x] = randomValueFromClosedInterval(0, s.computeMaxGene(x,
 					genome), state.random[thread]);
@@ -99,7 +111,7 @@ public class IntegerVectorIndividual extends BaselineVectorIndividual {
 	public boolean equals(Object ind) {
 		if (!(this.getClass().equals(ind.getClass())))
 			return false; // SimpleRuleIndividuals are special.
-		IntegerVectorIndividual i = (IntegerVectorIndividual) ind;
+		IntegerVectorIndividualCGP i = (IntegerVectorIndividualCGP) ind;
 		if (genome.length != i.genome.length)
 			return false;
 		for (int j = 0; j < genome.length; j++)

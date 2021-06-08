@@ -13,8 +13,8 @@ pop.subpops = 1
 pop.subpop.0 = ec.Subpopulation
 
 pop.subpop.0.size = 50
-pop.subpop.0.species = ec.cgp.representation.FloatVectorSpecies
-pop.subpop.0.species.ind = ec.cgp.representation.FloatVectorIndividual
+pop.subpop.0.species = ec.cgp.representation.FloatVectorSpeciesCGP
+pop.subpop.0.species.ind = ec.cgp.representation.FloatVectorIndividualCGP
 
 #================================================================================
 # Our own fitness.  A simple modification that makes smaller fitnesses better.

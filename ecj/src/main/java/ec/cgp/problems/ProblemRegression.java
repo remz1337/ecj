@@ -4,7 +4,7 @@ import ec.*;
 import ec.util.*;
 import ec.cgp.Evaluator;
 import ec.cgp.FitnessCGP;
-import ec.vector.BaselineVectorIndividual;
+import ec.cgp.representation.VectorIndividualCGP;
 import ec.cgp.representation.VectorSpeciesCGP;
 
 import java.util.*;
@@ -41,7 +41,7 @@ public class ProblemRegression extends ProblemCGP {
 
 		phenotype = new ArrayList<Float>();
 		VectorSpeciesCGP s = (VectorSpeciesCGP) ind.species;
-		BaselineVectorIndividual ind2 = (BaselineVectorIndividual) ind;
+		VectorIndividualCGP ind2 = (VectorIndividualCGP) ind;
 		
 		float diff = 0f;
 		
