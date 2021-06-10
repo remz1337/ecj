@@ -28,6 +28,7 @@ public class RNAProblem extends Problem implements SimpleProblemForm, GroupedPro
 
         public final static String P_TARGETPHENOTYPE = "target-phenotype";
         public final static String RNAFILE = "rna_sequence.fa";
+        public final static String VRNAOUTPUTFILE = "distances.out";
 
     private ProcessBuilder processBuilder;
 
@@ -42,7 +43,7 @@ public class RNAProblem extends Problem implements SimpleProblemForm, GroupedPro
         final String command = state.parameters.getString(base.push(P_COMMAND), null);
         if (command == null)
             state.output.fatal(String.format("%s: no value given for parameter '%s', but we need a command to run.", this.getClass().getSimpleName(), base.push(P_COMMAND)));
-        this.processBuilder = new ProcessBuilder(command,RNAFILE,target_phenotype);
+        this.processBuilder = new ProcessBuilder(command,RNAFILE,target_phenotype,VRNAOUTPUTFILE);
         }
 
 	@Override
@@ -150,13 +151,25 @@ public class RNAProblem extends Problem implements SimpleProblemForm, GroupedPro
             throw new IllegalStateException(String.format("External command terminated with exit code %d.", exitCode));
 
         // Read the output from the command's stdout
-        final StringBuilder sb = new StringBuilder();
+/*        final StringBuilder sb = new StringBuilder();
         final BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
         String line = "";			
         while ((line = reader.readLine())!= null) {
             sb.append(line).append(System.getProperty("line.separator"));
-        }
+        }*/
+
+            //try reading from file
+            File vrnafile = new File(VRNAOUTPUTFILE);
+            FileReader fr = new FileReader(vrnafile);
+            final StringBuilder sb = new StringBuilder();
+            final BufferedReader reader = new BufferedReader(fr);
+            String line = "";
+            while ((line = reader.readLine())!= null) {
+                sb.append(line).append(System.getProperty("line.separator"));
+            }
+
         return sb.toString();
+
         }
     
     /** Take a list of DoubleVectorIndividuals and output them to a tab-delimited file.
