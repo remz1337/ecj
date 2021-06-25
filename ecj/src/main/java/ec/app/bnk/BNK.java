@@ -7,7 +7,9 @@ import ec.simple.SimpleFitness;
 import ec.simple.SimpleProblemForm;
 import ec.util.Parameter;
 import ec.vector.BNKVectorIndividual;
+import org.jfree.util.StringUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -42,9 +44,47 @@ public class BNK extends Problem implements SimpleProblemForm
         {
         BNKVectorIndividual ind2 = (BNKVectorIndividual) ind;
         double fitness =0;
-        int n = ind2.genome.length; 
+            ind2.phenotype="";
+        //int n = ind2.genome.length;
 
-        //TODO
+        //Build the phenotype
+        //for each state
+            for(int state_it=0;state_it<Math.pow(2,ind2.gates);state_it++){
+                String tmp_machine_state_str=Integer.toBinaryString(state_it);
+                String machine_state_str= String.format("%1$" + ind2.gates + "s", tmp_machine_state_str).replace(' ', '0');
+
+                String next_state=new String();
+                for(int gate_it=0;gate_it<ind2.gates;gate_it++){
+                    String truth_entry_bin = new String();
+                    
+                    //Gate input
+                    for(int input_it=0;input_it< ind2.gates;input_it++){
+                        //mask with input binary string to find the corresponding truth table entry
+                        //for each input, if ==1 and state[input_it]==1...\
+
+                        int gene_pos=gate_it*ind2.genes_per_gate+input_it;
+                        if(ind2.genome[gene_pos]){
+                            if(machine_state_str.toCharArray()[input_it]=='1'){
+                                truth_entry_bin+="1";
+                            }else{
+                                truth_entry_bin+="0";
+                            }
+                        }
+                    }
+
+                    if(truth_entry_bin.length()>ind2.inputs){
+                        throw new IllegalStateException(String.format("Truth table entry (%d) doesn't fit with the number of inputs (%d).", truth_entry_bin.length(), ind2.inputs));
+                    }
+
+                    //find truth table output for current state
+                    int truth_entry=Integer.parseUnsignedInt(truth_entry_bin,2);
+
+                    int truth_output_pos=gate_it*ind2.genes_per_gate+(ind2.gates+truth_entry);
+                    boolean output = ind2.genome[truth_output_pos];
+                    next_state+=output ? 1 : 0;
+                }
+                ind2.phenotype+=next_state;
+            }
                                 
         //fitness /= n;
         ((SimpleFitness)(ind2.fitness)).setFitness( state, fitness, false);
