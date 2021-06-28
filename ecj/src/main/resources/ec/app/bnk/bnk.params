@@ -31,7 +31,7 @@ pop.subpop.0.species.ind.n = 5
 pop.subpop.0.species.ind.k = 3
 pop.subpop.0.species.fitness = ec.simple.SimpleFitness
 
-select.tournament.size =                2 
+#select.tournament.size =                2
 pop.subpop.0.species.mutation-type = baseline
 pop.subpop.0.species.mutation-prob = 0.05
 #pop.subpop.0.species.crossover-type =two

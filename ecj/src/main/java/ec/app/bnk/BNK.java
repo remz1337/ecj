@@ -9,8 +9,11 @@ import ec.util.Parameter;
 import ec.vector.BNKVectorIndividual;
 import org.jfree.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
+//import java.util.List;
 
 /**
  * A Binary NetworK Model (also called BNK model or “bonk” model) is a system of N logic gates
@@ -30,6 +33,13 @@ import java.util.HashMap;
  * the truth table.
  * Each gate specification therefore has N +2K bits. The complete genotype has N such specifications
  * comprising N(N + 2K) bits. Figure 10 shows an example.
+ *
+ * PROBLEM:
+ * A repressilator consists of three NOT gates connected in a loop. It is easily modelled as a (3, 1) BNK
+ * model with genome 001 10 100 10 010 10, in which blanks are included to improve readability.
+ * Figure 16 shows state transitions of the repressilator: there is a short loop 000 ↔ 111 and a longer
+ * loop consisting of the remaining states.
+ *
 */
 
 
@@ -45,15 +55,17 @@ public class BNK extends Problem implements SimpleProblemForm
         BNKVectorIndividual ind2 = (BNKVectorIndividual) ind;
         double fitness =0;
             ind2.phenotype="";
-        //int n = ind2.genome.length;
 
         //Build the phenotype
+            int STATES_NUM= (int) Math.pow(2,ind2.gates);
+            ArrayList<Integer> state_diagram = new ArrayList<Integer>();
         //for each state
-            for(int state_it=0;state_it<Math.pow(2,ind2.gates);state_it++){
+            for(int state_it=0;state_it<STATES_NUM;state_it++){
                 String tmp_machine_state_str=Integer.toBinaryString(state_it);
                 String machine_state_str= String.format("%1$" + ind2.gates + "s", tmp_machine_state_str).replace(' ', '0');
+                //Integer next_state;//= new boolean[ind2.gates];
 
-                String next_state=new String();
+                String next_state_str=new String();
                 for(int gate_it=0;gate_it<ind2.gates;gate_it++){
                     String truth_entry_bin = new String();
                     
@@ -81,13 +93,106 @@ public class BNK extends Problem implements SimpleProblemForm
 
                     int truth_output_pos=gate_it*ind2.genes_per_gate+(ind2.gates+truth_entry);
                     boolean output = ind2.genome[truth_output_pos];
-                    next_state+=output ? 1 : 0;
+                    next_state_str+=output ? 1 : 0;
+                    //next_state[gate_it]=output;
+                    //next_state=Integer.parseUnsignedInt(truth_entry_bin,2);
                 }
-                ind2.phenotype+=next_state;
+                ind2.phenotype+=next_state_str;
+                Integer next_state=Integer.parseUnsignedInt(next_state_str,2);
+                state_diagram.add(next_state);
             }
                                 
-        //fitness /= n;
+        //Evaluate fitness for an oscillator
+            //the STD (State Transition Diagram) needs to end in a loop/cycle
+            //Check if any gate oscillates within the loop :
+//            G1: (0 => 1 = >1 => 0)R, i.e., a symmetric square wave of period 2 (ideal, slow)
+//            G2: (1 => 0=> 1 => 0)R, i.e.,  a symmetric square wave of period 1 (ideal, fast)
+            //Do this for all states, and count how many achieved oscillatory behaviour
+            //divide by total number of states
+            int oscilliary_states=0;
+            for(int state_it=0;state_it<STATES_NUM;state_it++){
+                ArrayList<Integer> visited = new ArrayList<Integer>();
+                boolean looped=false;
+                Integer current_state=state_it;
+                while (!looped){
+                    if(visited.contains(current_state)){
+                        looped=true;
+                        //check oscillation
+//                        String tmp_machine_state_str=Integer.toBinaryString(current_state);
+//                        String machine_state_str= String.format("%1$" + ind2.gates + "s", tmp_machine_state_str).replace(' ', '0');
+//                        char[] machine_state = machine_state_str.toCharArray();
+
+                        String[] gates_states=new String[ind2.gates];
+                        for (int gate_it=0;gate_it<ind2.gates;gate_it++){
+                            gates_states[gate_it]="";//init with empty string
+                        }
+
+                        //int loop_start_idx=visited.indexOf(current_state);
+                        for (int loop_idx=visited.indexOf(current_state);loop_idx<visited.size();loop_idx++){
+                            String tmp_machine_state_str=Integer.toBinaryString(visited.get(loop_idx));
+                            String machine_state_str= String.format("%1$" + ind2.gates + "s", tmp_machine_state_str).replace(' ', '0');
+                            char[] machine_state = machine_state_str.toCharArray();
+
+                            for (int gate_it=0;gate_it<ind2.gates;gate_it++){
+                                gates_states[gate_it]+=machine_state[gate_it];
+                            }
+                        }
+
+                        //For each gate, check the oscillation between 0 and 1, and make sure the period is symmetrical
+                        boolean perfect_oscillator=false;
+                        for(int gate_it=0;gate_it<ind2.gates;gate_it++){
+                            char[] states=gates_states[gate_it].toCharArray();
+                            ArrayList<Integer> periods=new ArrayList<Integer>();
+//                            int first_period=1;
+//                            int second_period=0;
+                            int current_period=1;
+                            char last_char=states[0];
+                            for(int char_it=1;char_it<states.length;char_it++){
+                                if(last_char==states[char_it]) {
+                                    current_period++;
+                                }else{
+                                    periods.add(current_period);
+                                    current_period=1;
+                                }
+                                last_char=states[char_it];
+                            }
+                            //add last period
+                            if(last_char==states[0]){
+                                if(periods.size()>0){
+                                    int tmp_period=periods.get(0)+current_period;
+                                    periods.set(0,tmp_period);
+                                }else{
+                                    periods.add(current_period);
+                                }
+                            }else{
+                                periods.add(current_period);
+                            }
+
+                            if(verifyAllEqualUsingALoop(periods)){
+                                perfect_oscillator=true;
+                            }
+                        }
+                        if(perfect_oscillator){
+                            oscilliary_states++;
+                        }
+                    }else{
+                        visited.add(current_state);
+                        current_state=state_diagram.get(current_state);
+                    }
+                }
+            }
+
+            fitness=oscilliary_states/STATES_NUM;
+
         ((SimpleFitness)(ind2.fitness)).setFitness( state, fitness, false);
         ind2.evaluated = true; 
+        }
+
+        public boolean verifyAllEqualUsingALoop(List<Integer> list) {
+            for (Integer s : list) {
+                if (!s.equals(list.get(0)))
+                    return false;
+            }
+            return true;
         }
     }
