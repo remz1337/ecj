@@ -109,7 +109,7 @@ public class BNK extends Problem implements SimpleProblemForm
 //            G2: (1 => 0=> 1 => 0)R, i.e.,  a symmetric square wave of period 1 (ideal, fast)
             //Do this for all states, and count how many achieved oscillatory behaviour
             //divide by total number of states
-            int oscilliary_states=0;
+            double oscilliary_states=0;
             for(int state_it=0;state_it<STATES_NUM;state_it++){
                 ArrayList<Integer> visited = new ArrayList<Integer>();
                 boolean looped=false;
@@ -118,9 +118,6 @@ public class BNK extends Problem implements SimpleProblemForm
                     if(visited.contains(current_state)){
                         looped=true;
                         //check oscillation
-//                        String tmp_machine_state_str=Integer.toBinaryString(current_state);
-//                        String machine_state_str= String.format("%1$" + ind2.gates + "s", tmp_machine_state_str).replace(' ', '0');
-//                        char[] machine_state = machine_state_str.toCharArray();
 
                         String[] gates_states=new String[ind2.gates];
                         for (int gate_it=0;gate_it<ind2.gates;gate_it++){
@@ -140,11 +137,10 @@ public class BNK extends Problem implements SimpleProblemForm
 
                         //For each gate, check the oscillation between 0 and 1, and make sure the period is symmetrical
                         boolean perfect_oscillator=false;
+                        boolean asymmetrical_oscillator=false;
                         for(int gate_it=0;gate_it<ind2.gates;gate_it++){
                             char[] states=gates_states[gate_it].toCharArray();
                             ArrayList<Integer> periods=new ArrayList<Integer>();
-//                            int first_period=1;
-//                            int second_period=0;
                             int current_period=1;
                             char last_char=states[0];
                             for(int char_it=1;char_it<states.length;char_it++){
@@ -170,10 +166,36 @@ public class BNK extends Problem implements SimpleProblemForm
 
                             if(verifyAllEqualUsingALoop(periods)){
                                 perfect_oscillator=true;
+                            }else{//check if asymmetrical
+                                //ensure we have 2 periods
+                                if(periods.size()>=2){
+                                    int first_period= periods.get(0);
+                                    int second_period= periods.get(1);
+                                    boolean all_first_periods_equal=true;
+                                    boolean all_second_periods_equal=true;
+
+                                    for (int period_it=0;period_it<periods.size();period_it++) {
+                                        if (period_it%2==0){
+                                            if(periods.get(period_it)!=first_period){
+                                                all_first_periods_equal=false;
+                                            }
+                                        }else{
+                                            if(periods.get(period_it)!=second_period){
+                                                all_second_periods_equal=false;
+                                            }
+                                        }
+                                    }
+
+                                    if(all_first_periods_equal && all_second_periods_equal){
+                                        asymmetrical_oscillator=true;
+                                    }
+                                }
                             }
                         }
                         if(perfect_oscillator){
                             oscilliary_states++;
+                        }else if(asymmetrical_oscillator){
+                            oscilliary_states+=0.5;
                         }
                     }else{
                         visited.add(current_state);
@@ -184,7 +206,12 @@ public class BNK extends Problem implements SimpleProblemForm
 
             fitness=oscilliary_states/STATES_NUM;
 
-        ((SimpleFitness)(ind2.fitness)).setFitness( state, fitness, false);
+            Boolean isIdeal=false;
+            if(fitness==1.0){
+                isIdeal=true;
+            }
+
+        ((SimpleFitness)(ind2.fitness)).setFitness(state, fitness, isIdeal);
         ind2.evaluated = true; 
         }
 

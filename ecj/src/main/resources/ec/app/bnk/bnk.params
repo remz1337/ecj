@@ -6,22 +6,15 @@ parent.0 = ../../simple/simple.params
 
 seed.0 = time
 
+#Genome size needs to match with (N,K)
 pop.subpop.0.species.genome-size = 65
 
 eval.problem = ec.app.bnk.BNK
-#eval.problem.n = 5
-#eval.problem.k = 3
-#eval.problem.adjacent = true
 
-pop.subpop.0.size = 10
-generations = 10
+pop.subpop.0.size = 100
+generations = 1
 
 pop.subpop.0.species = ec.vector.BNKVectorSpecies
-#pop.subpop.0.species.pipe = ec.vector.breed.VectorMutationPipeline
-#pop.subpop.0.species.pipe.source.0 = ec.vector.breed.VectorCrossoverPipeline
-#pop.subpop.0.species.pipe.source.0.source.0 = ec.select.TournamentSelection
-#pop.subpop.0.species.pipe.source.0.source.1 = same
-
 pop.subpop.0.species.pipe = ec.vector.breed.VectorBaselineMutationPipeline
 vre.baselinemutation.keepbest = false
 pop.subpop.0.species.pipe.source.0 = ec.select.SteadySelection
@@ -36,3 +29,13 @@ pop.subpop.0.species.mutation-type = baseline
 pop.subpop.0.species.mutation-prob = 0.05
 #pop.subpop.0.species.crossover-type =two
 
+##############################
+# Logging
+##############################
+stat =					                        ec.simple.SimpleStatistics
+stat.file = 			                        $out.stat
+
+# Export population to file through statistics
+stat.num-children      = 1
+stat.child.0           = ec.vre.VREStats
+stat.child.0.VRE-CSV = $bnk.csv
