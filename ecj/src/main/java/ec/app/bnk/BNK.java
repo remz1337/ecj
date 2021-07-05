@@ -9,10 +9,7 @@ import ec.util.Parameter;
 import ec.vector.BNKVectorIndividual;
 import org.jfree.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 //import java.util.List;
 
 /**
@@ -109,7 +106,9 @@ public class BNK extends Problem implements SimpleProblemForm
 //            G2: (1 => 0=> 1 => 0)R, i.e.,  a symmetric square wave of period 1 (ideal, fast)
             //Do this for all states, and count how many achieved oscillatory behaviour
             //divide by total number of states
-            double oscilliary_states=0;
+            int oscilliary_states_count=0;
+            double oscilliary_states_weight=0;
+            Map<String,Integer> regimes = new HashMap<String,Integer>();
             for(int state_it=0;state_it<STATES_NUM;state_it++){
                 ArrayList<Integer> visited = new ArrayList<Integer>();
                 boolean looped=false;
@@ -138,6 +137,7 @@ public class BNK extends Problem implements SimpleProblemForm
                         //For each gate, check the oscillation between 0 and 1, and make sure the period is symmetrical
                         boolean perfect_oscillator=false;
                         boolean asymmetrical_oscillator=false;
+                        Set<String> local_regimes=new HashSet<String>();
                         for(int gate_it=0;gate_it<ind2.gates;gate_it++){
                             char[] states=gates_states[gate_it].toCharArray();
                             ArrayList<Integer> periods=new ArrayList<Integer>();
@@ -164,38 +164,54 @@ public class BNK extends Problem implements SimpleProblemForm
                                 periods.add(current_period);
                             }
 
-                            if(verifyAllEqualUsingALoop(periods)){
-                                perfect_oscillator=true;
-                            }else{//check if asymmetrical
-                                //ensure we have 2 periods
-                                if(periods.size()>=2){
-                                    int first_period= periods.get(0);
-                                    int second_period= periods.get(1);
-                                    boolean all_first_periods_equal=true;
-                                    boolean all_second_periods_equal=true;
+                            //ensure we have 2 periods
+                            if(periods.size()>=2){
+                                int first_period= periods.get(0);
+                                int second_period= periods.get(1);
+                                boolean all_first_periods_equal=true;
+                                boolean all_second_periods_equal=true;
 
-                                    for (int period_it=0;period_it<periods.size();period_it++) {
-                                        if (period_it%2==0){
-                                            if(periods.get(period_it)!=first_period){
-                                                all_first_periods_equal=false;
-                                            }
-                                        }else{
-                                            if(periods.get(period_it)!=second_period){
-                                                all_second_periods_equal=false;
-                                            }
+                                for (int period_it=0;period_it<periods.size();period_it++) {
+                                    if (period_it%2==0){
+                                        if(periods.get(period_it)!=first_period){
+                                            all_first_periods_equal=false;
+                                        }
+                                    }else{
+                                        if(periods.get(period_it)!=second_period){
+                                            all_second_periods_equal=false;
                                         }
                                     }
+                                }
 
-                                    if(all_first_periods_equal && all_second_periods_equal){
+                                if(all_first_periods_equal && all_second_periods_equal){
+                                    if(first_period==second_period){
+                                        perfect_oscillator=true;
+                                    }else{
                                         asymmetrical_oscillator=true;
                                     }
+
+                                    String regime_str="";
+                                    if(first_period>=second_period){//period order doesn't matter, so sort desc
+                                        regime_str=first_period+";"+second_period;
+                                    }else{
+                                        regime_str=second_period+";"+first_period;
+                                    }
+                                    local_regimes.add(regime_str);
                                 }
                             }
                         }
+                        for (String unique_regime:local_regimes) {
+                            Integer regime_count = regimes.getOrDefault(unique_regime,0);
+                            regime_count++;
+                            regimes.put(unique_regime,regime_count);
+                        }
+
                         if(perfect_oscillator){
-                            oscilliary_states++;
+                            oscilliary_states_weight++;
+                            oscilliary_states_count++;
                         }else if(asymmetrical_oscillator){
-                            oscilliary_states+=0.5;
+                            oscilliary_states_weight+=0.5;
+                            oscilliary_states_count++;
                         }
                     }else{
                         visited.add(current_state);
@@ -204,7 +220,19 @@ public class BNK extends Problem implements SimpleProblemForm
                 }
             }
 
-            fitness=oscilliary_states/STATES_NUM;
+            //fitness=oscilliary_states/STATES_NUM;
+
+            double max_count_same_regime=0.0;
+            for(String key : regimes.keySet()) {
+                Integer value = regimes.get(key);
+                if(value>max_count_same_regime){
+                    max_count_same_regime=value;
+                }
+            }
+            double max_prob=max_count_same_regime/STATES_NUM;
+            //double max_prob=max_count_same_regime/oscilliary_states_count;
+
+            fitness=(oscilliary_states_weight/STATES_NUM)* max_prob;
 
             Boolean isIdeal=false;
             if(fitness==1.0){
@@ -215,11 +243,11 @@ public class BNK extends Problem implements SimpleProblemForm
         ind2.evaluated = true; 
         }
 
-        public boolean verifyAllEqualUsingALoop(List<Integer> list) {
-            for (Integer s : list) {
-                if (!s.equals(list.get(0)))
-                    return false;
-            }
-            return true;
-        }
+//        public boolean verifyAllEqualUsingALoop(List<Integer> list) {
+//            for (Integer s : list) {
+//                if (!s.equals(list.get(0)))
+//                    return false;
+//            }
+//            return true;
+//        }
     }
